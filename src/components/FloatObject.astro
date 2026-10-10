@@ -1,0 +1,78 @@
+---
+import type { Project } from '../data/projects';
+import { displayOneLiner, displayTitle } from '../data/projects';
+import { inkFor, withBase } from '../lib/url';
+
+interface Props {
+  project: Project;
+  index: number; // position in mobile order
+}
+
+const { project: p, index } = Astro.props;
+const d = p.layout.desktop;
+const m = p.layout.mobile;
+const soon = p.status === 'soon';
+const title = displayTitle(p);
+const line = displayOneLiner(p);
+
+// Period 5.5-8s, varied per object; floatPhase offsets into the cycle so nothing moves in sync.
+const dur = 5.5 + ((index * 0.9) % 2.5);
+const vars = [
+  `--x:${d.x}`,
+  `--y:${d.y}`,
+  `--s:${d.scale}`,
+  `--r:${d.rotate}`,
+  `--z:${d.z}`,
+  `--ms:${m.scale}`,
+  `--mr:${m.rotate}`,
+  `--mo:${m.order}`,
+  `--dur:${dur.toFixed(2)}s`,
+  `--delay:${(-d.floatPhase * dur).toFixed(2)}s`,
+].join(';');
+
+const labelId = `label-${p.id}`;
+const Tag = soon ? 'button' : 'a';
+---
+
+<div
+  class="wrap"
+  data-obj
+  data-id={p.id}
+  data-status={p.status}
+  data-accent={p.accent}
+  data-ink={inkFor(p.accent)}
+  data-side={d.x > 60 ? 'left' : 'right'}
+  data-mside={index % 2 === 0 ? 'left' : 'right'}
+  style={vars}
+>
+  <Tag
+    class="obj"
+    href={soon ? undefined : withBase(p.href)}
+    type={soon ? 'button' : undefined}
+    aria-describedby={labelId}
+  >
+    <span class="shadow" aria-hidden="true"><span class="shadow-i"></span></span>
+    <span class="float">
+      <span class="tilt">
+        <span class="pose">
+          <img
+            src={withBase(p.image)}
+            alt={p.alt}
+            width={p.width}
+            height={p.height}
+            loading={index < 2 ? 'eager' : 'lazy'}
+            fetchpriority={index < 2 ? 'high' : 'auto'}
+            decoding="async"
+            draggable="false"
+          />
+          <span class="hit"></span>
+        </span>
+      </span>
+    </span>
+  </Tag>
+  <div class="label" id={labelId}>
+    <span class="label-title">{title}</span>
+    {line && <span class="label-line">{line}</span>}
+    {soon && <span class="chip">Process book coming soon</span>}
+  </div>
+</div>

@@ -1,0 +1,21 @@
+---
+import '../styles/hero.css';
+import FloatObject from './FloatObject.astro';
+import { PROJECTS } from '../data/projects';
+import { SITE } from '../data/site';
+
+// DOM (and tab) order follows the mobile reading order.
+const ordered = [...PROJECTS].sort((a, b) => a.layout.mobile.order - b.layout.mobile.order);
+---
+
+<main class="stage" data-stage>
+  <div class="intro">
+    <h1>{SITE.name}</h1>
+    <p>{SITE.oneLiner}</p>
+  </div>
+  {ordered.map((project, index) => <FloatObject project={project} index={index} />)}
+</main>
+
+<script>
+  import '../scripts/hero';
+</script>

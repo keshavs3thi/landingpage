@@ -1,0 +1,38 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { SITE } from '../data/site';
+import { withBase } from '../lib/url';
+
+// Resume links only once the PDF exists in public/, so the nav never points at a 404.
+const hasResume = existsSync(join(process.cwd(), 'public', SITE.resumeHref));
+---
+
+<header class="nav">
+  <a class="wordmark" href={withBase('/')}>{SITE.name}</a>
+  <nav aria-label="Primary">
+    <ul>
+      {
+        SITE.showAbout && (
+          <li>
+            <a href={withBase('/about/')}>About</a>
+          </li>
+        )
+      }
+      <li>
+        {
+          hasResume ? (
+            <a href={withBase(SITE.resumeHref)}>Resume</a>
+          ) : (
+            <span class="muted" title="Coming soon">
+              Resume<span class="visually-hidden"> (coming soon)</span>
+            </span>
+          )
+        }
+      </li>
+      <li>
+        <a href={`mailto:${SITE.email}`}>Contact</a>
+      </li>
+    </ul>
+  </nav>
+</header>

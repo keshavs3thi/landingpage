@@ -1,0 +1,347 @@
+/* Hero stage: floating objects. Only transform-family properties and opacity animate. */
+
+.stage {
+  --obj-w: clamp(160px, min(30vw, 46svh), 600px);
+  position: relative;
+  height: calc(100svh - var(--banner-h) - var(--nav-h));
+  min-height: 520px;
+  overflow: hidden;
+}
+
+/* Name + one-liner: lower-left, behind the objects. */
+.intro {
+  position: absolute;
+  left: var(--pad);
+  bottom: var(--pad);
+  z-index: 0;
+}
+
+.intro h1 {
+  margin: 0 0 0.3em;
+  font-size: clamp(44px, 7.2vw, 124px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  white-space: nowrap;
+}
+
+.intro p {
+  margin: 0;
+  max-width: min(28em, 62vw);
+  font-size: clamp(15px, 1.2vw, 19px);
+  line-height: 1.4;
+}
+
+/* One object. Positioned by its centre (data x/y %). */
+.wrap {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  z-index: calc(1 + var(--z));
+  width: calc(var(--obj-w) * var(--s));
+  translate: -50% -50%;
+  transition:
+    opacity 450ms var(--ease),
+    scale 450ms var(--ease);
+}
+
+.wrap.is-active {
+  z-index: 20;
+}
+
+.stage[data-active] .wrap:not(.is-active) {
+  opacity: 0.5;
+  scale: 0.98;
+}
+
+.obj {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  /* Only the inner .hit area catches the pointer, so transparent padding doesn't steal hover. */
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.obj:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -10px;
+}
+
+.float,
+.tilt,
+.pose {
+  display: block;
+}
+
+.float {
+  position: relative;
+  --amp: 5px;
+  --rd: 1.2deg;
+  animation: float var(--dur) ease-in-out var(--delay) infinite;
+}
+
+.tilt {
+  transform: perspective(1100px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  transition:
+    scale 500ms var(--ease),
+    translate 500ms var(--ease);
+}
+
+.is-active .tilt {
+  scale: 1.08;
+  translate: 0 -10px;
+}
+
+.pose {
+  position: relative;
+  rotate: calc(var(--r) * 1deg);
+}
+
+.pose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.hit {
+  position: absolute;
+  inset: 18% 16%;
+  border-radius: 40%;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, calc(var(--amp) * -1), 0) rotate(calc(var(--rd) * -1));
+  }
+  50% {
+    transform: translate3d(0, var(--amp), 0) rotate(var(--rd));
+  }
+}
+
+/* Soft floor shadow; shrinks and fades as the object rises. */
+.shadow {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: 86%;
+  height: 12%;
+  pointer-events: none;
+  transition:
+    opacity 500ms var(--ease),
+    scale 500ms var(--ease);
+}
+
+.shadow-i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(38 26 14 / 0.34), rgb(38 26 14 / 0));
+  animation: shadow var(--dur) ease-in-out var(--delay) infinite;
+}
+
+.is-active .shadow {
+  opacity: 0.6;
+  scale: 1.12;
+}
+
+@keyframes shadow {
+  0%,
+  100% {
+    transform: scale(0.84);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+/* Label: beside the object on the side with more room. */
+.label {
+  position: absolute;
+  top: 50%;
+  left: 92%;
+  z-index: 2;
+  width: max-content;
+  max-width: 15rem;
+  opacity: 0;
+  translate: 8px -50%;
+  pointer-events: none;
+  transition:
+    opacity 300ms var(--ease),
+    translate 400ms var(--ease);
+}
+
+.wrap[data-side='left'] .label {
+  left: auto;
+  right: 92%;
+  text-align: right;
+  translate: -8px -50%;
+}
+
+.wrap.is-active .label {
+  opacity: 1;
+  translate: 0 -50%;
+}
+
+.label-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.label-line {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.78;
+}
+
+.chip {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.label.pulse .chip {
+  animation: pulse 420ms var(--ease);
+}
+
+@keyframes pulse {
+  40% {
+    transform: scale(1.12);
+  }
+}
+
+/* Touch devices and narrow viewports: staggered vertical scroll, labels always visible. */
+@media (hover: none), (max-width: 700px) {
+  .stage {
+    --obj-w: min(80vw, 440px);
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 0 72px;
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .intro {
+    position: static;
+    order: -1;
+    max-width: none;
+    padding: 8px var(--pad) 20px;
+  }
+
+  .wrap {
+    --s: var(--ms);
+    --r: var(--mr);
+    position: relative;
+    left: auto;
+    top: auto;
+    order: var(--mo);
+    z-index: 1;
+    translate: none;
+    margin-top: -12vw;
+  }
+
+  .wrap[data-mside='left'] {
+    align-self: flex-start;
+    margin-left: -5vw;
+  }
+
+  .wrap[data-mside='right'] {
+    align-self: flex-end;
+    margin-right: -5vw;
+  }
+
+  .stage[data-active] .wrap:not(.is-active) {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .label,
+  .wrap[data-side='left'] .label {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    max-width: none;
+    margin-top: -12%;
+    padding: 0 calc(var(--pad) + 5vw);
+    opacity: 1;
+    translate: none;
+    text-align: left;
+  }
+
+  .wrap[data-mside='right'] .label {
+    text-align: right;
+  }
+
+  .wrap.is-active .label {
+    translate: none;
+  }
+
+  /* Chip appears on tap; space is reserved so nothing shifts. */
+  .chip {
+    opacity: 0;
+    transition: opacity 300ms var(--ease);
+  }
+
+  .wrap.is-active .chip {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float,
+  .shadow-i,
+  .label.pulse .chip {
+    animation: none;
+  }
+
+  .is-active .tilt,
+  .is-active .shadow,
+  .stage[data-active] .wrap:not(.is-active) {
+    scale: none;
+    translate: none;
+  }
+
+  .label,
+  .wrap[data-side='left'] .label,
+  .wrap.is-active .label {
+    translate: 0 -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and ((hover: none) or (max-width: 700px)) {
+  .label,
+  .wrap[data-side='left'] .label,
+  .wrap.is-active .label {
+    translate: none;
+  }
+}
