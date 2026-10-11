@@ -39,8 +39,8 @@ export const PROJECTS: Project[] = [
     status: 'soon',
     accent: '#D9653B', // TBD provisional
     layout: {
-      desktop: { x: 23, y: 33, scale: 0.9, rotate: -14, z: 3, floatPhase: 0.0 },
-      mobile: { order: 2, scale: 0.85, rotate: -10 },
+      desktop: { x: 88, y: 40, scale: 0.72, rotate: -14, z: 2, floatPhase: 0.0 },
+      mobile: { order: 5, scale: 0.75, rotate: -10 },
     },
   },
   {
@@ -57,8 +57,8 @@ export const PROJECTS: Project[] = [
     status: 'soon',
     accent: '#3E5BA9', // TBD provisional
     layout: {
-      desktop: { x: 50, y: 46, scale: 1.3, rotate: 6, z: 2, floatPhase: 0.35 },
-      mobile: { order: 1, scale: 1.0, rotate: 5 },
+      desktop: { x: 13, y: 42, scale: 0.85, rotate: 8, z: 2, floatPhase: 0.35 },
+      mobile: { order: 4, scale: 0.85, rotate: 5 },
     },
   },
   {
@@ -75,8 +75,8 @@ export const PROJECTS: Project[] = [
     status: 'soon',
     accent: '#8FA37E', // TBD provisional
     layout: {
-      desktop: { x: 76, y: 22, scale: 0.62, rotate: 18, z: 4, floatPhase: 0.6 },
-      mobile: { order: 3, scale: 0.6, rotate: 12 },
+      desktop: { x: 44, y: 30, scale: 0.62, rotate: 14, z: 4, floatPhase: 0.6 },
+      mobile: { order: 1, scale: 0.7, rotate: 12 },
     },
   },
   {
@@ -93,8 +93,8 @@ export const PROJECTS: Project[] = [
     status: 'soon',
     accent: '#D6A73C', // TBD provisional
     layout: {
-      desktop: { x: 69, y: 75, scale: 0.8, rotate: -16, z: 5, floatPhase: 0.15 },
-      mobile: { order: 4, scale: 0.7, rotate: -14 },
+      desktop: { x: 58, y: 62, scale: 0.85, rotate: -12, z: 5, floatPhase: 0.15 },
+      mobile: { order: 2, scale: 0.8, rotate: -14 },
     },
   },
   {
@@ -111,8 +111,8 @@ export const PROJECTS: Project[] = [
     status: 'soon',
     accent: '#7A4E6E', // TBD provisional
     layout: {
-      desktop: { x: 96, y: 50, scale: 1.05, rotate: 58, z: 1, floatPhase: 0.8 },
-      mobile: { order: 5, scale: 0.9, rotate: 32 },
+      desktop: { x: 41, y: 58, scale: 0.78, rotate: 32, z: 3, floatPhase: 0.8 },
+      mobile: { order: 3, scale: 0.9, rotate: 32 },
     },
   },
 ];

@@ -91,7 +91,8 @@ Drive the page from a single data file (e.g. `src/data/projects.json` or `.ts`).
 ### Hover (desktop, pointer devices)
 - Hovered object: scales up about 1.06-1.10, lifts slightly, and tilts toward the cursor (max about 8 degrees, smoothed with easing). The float loop continues underneath or eases out.
 - Other objects: dim to about 0.5 opacity and scale about 0.98.
-- **Background:** transitions from the neutral base to the hovered project's `accent` over about 400-600ms. Returns to neutral when hover ends. Base neutral is a warm light neutral, starting value `#E9E4DC`.
+- **Background:** transitions from the dark base to a deep tint of the hovered project's `accent` (about 35% accent mixed into near-black) over about 400-600ms. Returns to the base when hover ends. Base is a dark grey, starting value `#141414`.
+- **Spotlight:** a soft, warm pool of light rests over the product cluster and trails the cursor across the stage (pointer devices only; fixed under touch and reduced motion). While an object is active, the light takes on that project's accent.
 - **Label:** title + one-liner (+ "coming soon" chip when applicable) fades/slides in near the object, not covering it.
 - Cursor: pointer.
 
@@ -111,7 +112,8 @@ Drive the page from a single data file (e.g. `src/data/projects.json` or `.ts`).
 ## 7. Visual design language
 
 - **Minimal.** The objects are the point; everything else recedes.
-- **Palette:** neutral base, near-black text, a single accent per project (hover only). No other decorative color.
+- **Palette:** dark grey/near-black base with a subtle spotlight, off-white text, a single accent per project (hover only, as a deep tint). No other decorative color.
+- **Hierarchy:** product design is the main work. The three physical models sit together in the center of the stage; the laptop (UX) and camera (photography) sit smaller, to either side.
 - **Type:** a clean grotesque **sans-serif**. Preferred: Helvetica/system stack with Inter or Geist as the free web-font fallback (Soehne if the user supplies a license). Few sizes, generous letter-spacing discipline, small nav text, a larger name/one-liner.
 - **Grain (optional, subtle):** a light film-grain overlay on the background, as in the orange reference. Keep it behind a flag.
 - **Future project pages** follow the language of https://www.edquilang.design/design/lunet : big hero image; title with category and year; small metadata block (disciplines, role); alternating full-width images and short headed text blocks; quiet minimal footer. The landing page should feel like it belongs to that family, not copy it.

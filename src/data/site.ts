@@ -17,5 +17,5 @@ export const SITE = {
   showAbout: true, // TBD: About links to a stub page; set false to hide it until written
   grain: true,
 
-  baseBg: '#E9E4DC',
+  baseBg: '#141414', // dark stage; hover shifts to a deep tint of each accent
 } as const;

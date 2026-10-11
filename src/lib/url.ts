@@ -15,5 +15,16 @@ export function luminance(hex: string): number {
   return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
 }
 
-// Near-black text on light accents, off-white on dark ones.
-export const inkFor = (hex: string): 'dark' | 'light' => (luminance(hex) < 0.18 ? 'light' : 'dark');
+// Deep tint for the dark stage: mix `amount` of the accent into near-black. Returns #RRGGBB.
+export function tint(hex: string, amount = 0.35, base = 0x0b0b0b): string {
+  const n = parseInt(hex.replace('#', ''), 16);
+  const mix = (shift: number) =>
+    Math.round(((n >> shift) & 255) * amount + ((base >> shift) & 255) * (1 - amount));
+  return `#${[16, 8, 0].map((s) => mix(s).toString(16).padStart(2, '0')).join('')}`;
+}
+
+// WCAG contrast ratio between two #RRGGBB colours.
+export function contrast(a: string, b: string): number {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}

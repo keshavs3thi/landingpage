@@ -3,6 +3,7 @@
 
 const MAX_TILT = 8; // degrees
 const EASE = 0.12; // per-frame lerp toward the target tilt
+const SPOT_EASE = 0.08; // slower lerp so the spotlight trails the cursor
 
 const root = document.documentElement;
 const stage = document.querySelector<HTMLElement>('[data-stage]');
@@ -20,8 +21,8 @@ function init(stage: HTMLElement) {
     active = wrap;
     wrap.classList.add('is-active');
     stage.dataset.active = wrap.dataset.id;
-    root.style.setProperty('--bg', wrap.dataset.accent ?? '');
-    root.dataset.ink = wrap.dataset.ink;
+    root.style.setProperty('--bg', wrap.dataset.bg ?? '');
+    stage.style.setProperty('--spot-accent', wrap.dataset.accent ?? '');
   };
 
   const deactivate = (wrap?: HTMLElement) => {
@@ -29,8 +30,7 @@ function init(stage: HTMLElement) {
     active.classList.remove('is-active');
     active = null;
     delete stage.dataset.active;
-    root.style.removeProperty('--bg');
-    delete root.dataset.ink;
+    root.style.removeProperty('--bg'); // --spot-accent stays so the accent layer fades out in colour
   };
 
   // When hover ends, fall back to whichever object holds keyboard focus.
@@ -117,6 +117,8 @@ function init(stage: HTMLElement) {
     deactivate();
   });
 
+  initSpot(stage, reduceMotion, finePointer);
+
   // Touch layout: scrolling the active object out of view returns to neutral.
   const io = new IntersectionObserver(
     (entries) => {
@@ -127,4 +129,42 @@ function init(stage: HTMLElement) {
     { threshold: [0, 0.4] },
   );
   wraps.forEach((wrap) => io.observe(wrap));
+}
+
+// Spotlight trails the cursor across the stage and drifts back to its CSS rest point on leave.
+// Pointer devices only; touch, narrow layouts and reduced motion keep it at rest.
+function initSpot(stage: HTMLElement, reduceMotion: MediaQueryList, finePointer: MediaQueryList) {
+  const spot = stage.querySelector<HTMLElement>('.spot');
+  if (!spot) return;
+  const wide = matchMedia('(min-width: 701px)');
+  let x = 0, y = 0, targetX = 0, targetY = 0, frame = 0;
+
+  const step = () => {
+    x += (targetX - x) * SPOT_EASE;
+    y += (targetY - y) * SPOT_EASE;
+    const settled = Math.abs(targetX - x) < 0.5 && Math.abs(targetY - y) < 0.5;
+    if (settled) (x = targetX), (y = targetY);
+    spot.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+    frame = settled ? 0 : requestAnimationFrame(step);
+  };
+  const kick = () => {
+    if (!frame) frame = requestAnimationFrame(step);
+  };
+
+  stage.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch' || !finePointer.matches || !wide.matches || reduceMotion.matches) return;
+    // Offset from the rest point (spot centre with translate removed).
+    const r = spot.getBoundingClientRect();
+    targetX = e.clientX - (r.left + r.width / 2 - x);
+    targetY = e.clientY - (r.top + r.height / 2 - y);
+    kick();
+  });
+
+  const rest = () => {
+    targetX = targetY = 0;
+    kick();
+  };
+  stage.addEventListener('pointerleave', rest);
+  reduceMotion.addEventListener('change', rest);
+  wide.addEventListener('change', rest);
 }

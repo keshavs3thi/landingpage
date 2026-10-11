@@ -1,9 +1,7 @@
 :root {
-  --base-bg: #e9e4dc; /* overridden from SITE.baseBg */
-  --bg: var(--base-bg); /* set to a project accent by hero.ts */
-  --ink-dark: #141414;
-  --ink-light: #f6f3ee;
-  --ink: var(--ink-dark);
+  --base-bg: #141414; /* overridden from SITE.baseBg */
+  --bg: var(--base-bg); /* set to a deep tint of a project accent by hero.ts */
+  --ink: #f6f3ee;
 
   --banner-h: 0px;
   --nav-h: 56px;
@@ -17,10 +15,6 @@
 
 html.has-banner {
   --banner-h: 28px;
-}
-
-html[data-ink='light'] {
-  --ink: var(--ink-light);
 }
 
 *,
@@ -43,19 +37,17 @@ body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color var(--bg-dur) var(--ease),
-    color 400ms var(--ease);
+  transition: background-color var(--bg-dur) var(--ease);
 }
 
-/* Soft studio vignette (ref-02), sits behind content. */
+/* Studio vignette: corners fall off toward black. Sits behind content. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(120% 90% at 50% 38%, transparent 55%, rgb(40 28 16 / 0.09) 100%);
+  background: radial-gradient(120% 90% at 50% 38%, transparent 45%, rgb(0 0 0 / 0.5) 100%);
 }
 
 /* Optional film grain (ref-01), toggled by SITE.grain. Sits above everything, ignores input. */
@@ -65,8 +57,8 @@ html.grain body::after {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.22;
-  mix-blend-mode: multiply;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 

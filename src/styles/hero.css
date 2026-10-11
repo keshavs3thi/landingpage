@@ -8,6 +8,41 @@
   overflow: hidden;
 }
 
+/* Spotlight: rests over the product cluster; hero.ts offsets it toward the cursor (translate only).
+   The accent layer fades in over the warm one while an object is active. */
+.spot {
+  --spot-w: min(90vw, 1100px);
+  position: absolute;
+  left: 48%;
+  top: 50%;
+  z-index: 0;
+  width: var(--spot-w);
+  aspect-ratio: 1;
+  margin: calc(var(--spot-w) / -2) 0 0 calc(var(--spot-w) / -2);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 244 228 / 0.14), rgb(255 244 228 / 0.05) 55%, transparent);
+  pointer-events: none;
+  will-change: translate;
+}
+
+.spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--spot-accent, transparent) 30%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--bg-dur) var(--ease);
+}
+
+.stage[data-active] .spot::after {
+  opacity: 1;
+}
+
 /* Name + one-liner: lower-left, behind the objects. */
 .intro {
   position: absolute;
@@ -151,7 +186,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(38 26 14 / 0.34), rgb(38 26 14 / 0));
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
   animation: shadow var(--dur) ease-in-out var(--delay) infinite;
 }
 
@@ -249,8 +284,16 @@
     overflow: clip;
   }
 
+  .spot {
+    --spot-w: 130vw;
+    left: 50%;
+    top: 40svh;
+    translate: none;
+  }
+
   .intro {
-    position: static;
+    position: relative;
+    z-index: 1;
     order: -1;
     max-width: none;
     padding: 8px var(--pad) 20px;

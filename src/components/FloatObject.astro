@@ -1,7 +1,7 @@
 ---
 import type { Project } from '../data/projects';
 import { displayOneLiner, displayTitle } from '../data/projects';
-import { inkFor, withBase } from '../lib/url';
+import { contrast, tint, withBase } from '../lib/url';
 
 interface Props {
   project: Project;
@@ -30,6 +30,10 @@ const vars = [
   `--delay:${(-d.floatPhase * dur).toFixed(2)}s`,
 ].join(';');
 
+// Hover background is a deep tint of the accent; light ink must stay legible on it.
+const bg = tint(p.accent);
+if (contrast(bg, '#f6f3ee') < 4.5) throw new Error(`Accent ${p.accent} (${p.id}) tints too light for light ink`);
+
 const labelId = `label-${p.id}`;
 const Tag = soon ? 'button' : 'a';
 ---
@@ -40,7 +44,7 @@ const Tag = soon ? 'button' : 'a';
   data-id={p.id}
   data-status={p.status}
   data-accent={p.accent}
-  data-ink={inkFor(p.accent)}
+  data-bg={bg}
   data-side={d.x > 60 ? 'left' : 'right'}
   data-mside={index % 2 === 0 ? 'left' : 'right'}
   style={vars}
