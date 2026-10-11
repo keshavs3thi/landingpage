@@ -1,42 +1,12 @@
+/* Landing-page (and stub page) look. Shared tokens and base styles are in tokens.css. */
+@import './tokens.css';
+
 :root {
-  --base-bg: #141414; /* overridden from SITE.baseBg */
-  --bg: var(--base-bg); /* set to a deep tint of a project accent by hero.ts */
-  --ink: #f6f3ee;
-
-  --banner-h: 0px;
   --nav-h: 56px;
-  --pad: clamp(20px, 3vw, 44px);
-
-  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --bg-dur: 550ms;
-  --font: 'Helvetica Neue', Helvetica, 'Inter Variable', Inter, system-ui, -apple-system,
-    'Segoe UI', sans-serif;
-}
-
-html.has-banner {
-  --banner-h: 28px;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  margin: 0;
-  min-height: 100svh;
-  background-color: var(--bg);
-  color: var(--ink);
-  font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.4;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--bg-dur) var(--ease);
 }
 
@@ -60,33 +30,6 @@ html.grain body::after {
   opacity: 0.16;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-a {
-  color: inherit;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-/* Banner */
-.banner {
-  height: var(--banner-h);
-  margin: 0;
-  padding: 0 var(--pad);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
 }
 
 /* Nav */
@@ -127,12 +70,6 @@ a {
 .nav .muted {
   opacity: 0.45;
   cursor: default;
-}
-
-:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
-  border-radius: 2px;
 }
 
 /* Stub pages */

@@ -1,0 +1,545 @@
+/* Photography: crisp, quiet, fast. Photos are never tinted, rounded, bordered or shadowed.
+   Animations stay in the 120-260ms range with plain ease-out. */
+@import './tokens.css';
+
+:root {
+  --side-w: 240px;
+  --gap: 14px;
+  --t-fast: 120ms;
+  --t-nav: 150ms;
+  --t-open: 240ms;
+  --panel-w: 300px;
+}
+
+body.ph {
+  --bg: var(--base-bg);
+  --ink: var(--text);
+  font-size: 14px;
+  letter-spacing: 0.005em;
+}
+
+/* Low-specificity resets so component classes win. */
+:where(.ph) a {
+  text-decoration: none;
+}
+
+:where(.ph) button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Shell: fixed sidebar + content */
+.ph-shell {
+  display: grid;
+  grid-template-columns: var(--side-w) minmax(0, 1fr);
+  min-height: calc(100svh - var(--banner-h));
+}
+
+.side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: calc(100svh - var(--banner-h));
+  overflow-y: auto;
+  padding: 28px 24px 40px var(--pad);
+}
+
+.side-nav {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.side-nav a,
+.side-toggle {
+  color: var(--text-muted);
+  transition: color var(--t-fast) ease-out;
+}
+
+.side-nav a:hover,
+.side-nav a[aria-current='page'],
+.side-nav a.is-open,
+.side-toggle:hover {
+  color: var(--text);
+}
+
+.side-back {
+  display: inline-block;
+  margin-bottom: 28px;
+}
+
+.side-list,
+.side-projects {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.side-list > li {
+  margin-bottom: 10px;
+}
+
+.side-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.side-toggle {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.side-projects {
+  margin: 6px 0 4px 12px;
+}
+
+.side-projects li + li {
+  margin-top: 5px;
+}
+
+.side-year > .side-row a {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Content */
+.ph-main {
+  padding: 28px var(--pad) 64px 8px;
+}
+
+.ph-empty {
+  color: var(--text-muted);
+}
+
+/* Masonry. Column counts follow the grid's own width (container queries), not the viewport.
+   Per-tile --c/--k/--m and per-grid --h/--g come from masonry.ts. */
+/* Right-aligned: on screens wider than the cap, the spare space sits between sidebar and grid. */
+.grid-wrap {
+  container-type: inline-size;
+  max-width: 1180px;
+  margin-left: auto;
+}
+
+/* Small sets (like Selected at launch) use at most two columns in a narrower block, so four
+   photos read as a deliberate 2x2 instead of a row of three plus one. */
+.grid-wrap:has([data-max='2']) {
+  max-width: 820px;
+}
+
+.grid {
+  --n: 1;
+  --cw: calc((100cqi - (var(--n) - 1) * var(--gap)) / var(--n));
+  --H: var(--h1);
+  --G: var(--g1);
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: calc(var(--H) * var(--cw) + (var(--G) - 1) * var(--gap));
+}
+
+.tile {
+  --c: var(--c1);
+  --k: var(--k1);
+  --m: var(--m1);
+  position: absolute;
+  left: calc(var(--c) * (var(--cw) + var(--gap)));
+  top: calc(var(--k) * var(--cw) + var(--m) * var(--gap));
+  width: var(--cw);
+  aspect-ratio: var(--ar);
+  background: var(--ph);
+}
+
+@container (min-width: 400px) {
+  .grid {
+    --n: 2;
+    --H: var(--h2);
+    --G: var(--g2);
+  }
+  .tile {
+    --c: var(--c2);
+    --k: var(--k2);
+    --m: var(--m2);
+  }
+}
+
+@container (min-width: 880px) {
+  .grid:not([data-max='2']) {
+    --n: 3;
+    --H: var(--h3);
+    --G: var(--g3);
+  }
+  .grid:not([data-max='2']) .tile {
+    --c: var(--c3);
+    --k: var(--k3);
+    --m: var(--m3);
+  }
+}
+
+.tile a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.tile a:focus-visible {
+  outline-offset: 2px;
+}
+
+.tile img,
+.v-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.tile img {
+  transition: filter var(--t-fast) ease-out;
+}
+
+@media (hover: hover) {
+  .tile a:hover img {
+    filter: brightness(1.06);
+  }
+}
+
+/* Mobile bar + index sheet */
+.mbar,
+.sheet {
+  display: none;
+}
+
+.mbar-btn {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 14px;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --gap: 8px;
+  }
+
+  .ph-shell {
+    display: block;
+  }
+
+  .side {
+    display: none;
+  }
+
+  .mbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--pad);
+    background: var(--bg);
+  }
+
+  .ph-main {
+    padding: 4px var(--pad) 48px;
+  }
+
+  .sheet[open] {
+    display: block;
+  }
+
+  .sheet {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0 var(--pad) 40px;
+    border: 0;
+    background: var(--bg);
+    color: var(--text);
+    overflow-y: auto;
+  }
+
+  .sheet[open] {
+    animation: fade-in var(--t-nav) ease-out;
+  }
+
+  .sheet::backdrop {
+    background: var(--bg);
+  }
+
+  .sheet-head {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sheet .side-nav {
+    font-size: 17px;
+  }
+
+  .sheet .side-nav a,
+  .sheet .side-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .sheet .side-toggle {
+    width: 44px;
+    justify-content: center;
+  }
+
+  .sheet .side-back {
+    margin-bottom: 12px;
+  }
+
+  .sheet .side-list > li {
+    margin-bottom: 0;
+  }
+}
+
+/* Viewer */
+/* The gutter is always reserved so locking scroll under the viewer never changes the grid width
+   (which would reflow the masonry and move the scroll position). */
+html:has(body.ph) {
+  scrollbar-gutter: stable;
+}
+
+html.viewer-open {
+  overflow: hidden;
+}
+
+.viewer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: hidden;
+}
+
+.viewer[open] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--panel-w);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: 'stage panel' 'bar panel';
+}
+
+/* Without JS (direct visit), the dialog is open but not modal: give it the backdrop itself. */
+.viewer[open]:not(:modal) {
+  z-index: 50;
+  background: color-mix(in srgb, var(--base-bg, #141414) 97%, transparent);
+}
+
+/* Older engines don't inherit custom properties into ::backdrop, hence the fallback. */
+.viewer::backdrop {
+  background: color-mix(in srgb, var(--base-bg, #141414) 97%, transparent);
+}
+
+.v-stage {
+  grid-area: stage;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  margin: 28px 0 0 var(--pad);
+  touch-action: pinch-zoom;
+}
+
+.v-frame {
+  width: min(100cqw, 100cqh * var(--ar, 1));
+  aspect-ratio: var(--ar, 1);
+  background: var(--ph);
+  transform-origin: 0 0;
+  position: relative;
+}
+
+.v-frame > * {
+  position: absolute;
+  inset: 0;
+}
+
+.v-bar {
+  grid-area: bar;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px var(--pad) 10px;
+}
+
+.v-bar[hidden] {
+  display: none;
+}
+
+.v-count {
+  min-width: 5.5em;
+  text-align: center;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.v-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--text-muted);
+  transition: color var(--t-fast) ease-out;
+}
+
+.v-btn:hover {
+  color: var(--text);
+}
+
+.v-panel {
+  grid-area: panel;
+  padding: 18px var(--pad) 28px 28px;
+  overflow-y: auto;
+}
+
+.v-close {
+  margin: 0 0 18px -12px;
+  padding: 0 12px;
+}
+
+.v-details > summary {
+  display: none;
+}
+
+.v-info {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.v-info a {
+  color: var(--text);
+}
+
+.v-info a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.v-title {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.v-where {
+  margin: 0 0 18px;
+}
+
+.v-meta {
+  margin: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.v-row {
+  display: grid;
+  grid-template-columns: 6.5em 1fr;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.v-row dt {
+  color: var(--text-muted);
+}
+
+.v-row dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.v-desc {
+  margin: 14px 0 0;
+  color: var(--text-muted);
+}
+
+.v-copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.v-copy-btn {
+  margin-left: -12px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.v-copied {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .viewer[open] {
+    display: block;
+    overflow-y: auto;
+  }
+
+  .v-stage {
+    container-type: inline-size;
+    margin: 56px 0 0;
+  }
+
+  .v-frame {
+    width: min(100cqw, 78svh * var(--ar, 1));
+  }
+
+  .v-panel {
+    padding: 0 var(--pad) 32px;
+    overflow: visible;
+  }
+
+  .v-close {
+    position: fixed;
+    top: 6px;
+    right: var(--pad);
+    margin: 0;
+    z-index: 2;
+  }
+
+  .v-details > summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open] {
+    animation: none;
+  }
+}

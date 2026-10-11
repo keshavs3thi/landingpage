@@ -1,0 +1,67 @@
+---
+// The photo viewer: a native <dialog> driven by photo-viewer.ts. The page's current list is
+// embedded as JSON. On a photo URL the dialog is rendered already open on that photo, so the
+// image and info exist without JS; the script then upgrades it to a modal.
+import { VIEWER_SIZES } from '../../lib/photos/images';
+import { infoHtml, pictureHtml, type ViewerEntry } from '../../lib/photos/render';
+
+interface Props {
+  entries: ViewerEntry[];
+  open?: number; // index to show on load (photo URL)
+  listUrl: string; // where closing a directly visited photo lands (with base)
+  listTitle: string; // document title to restore on close
+}
+
+const { entries, open, listUrl, listTitle } = Astro.props;
+const e = open === undefined ? undefined : entries[open];
+const many = entries.length > 1;
+---
+
+<dialog
+  class="viewer"
+  aria-labelledby="v-label"
+  data-viewer
+  data-list-url={listUrl}
+  data-list-title={listTitle}
+  data-open-index={open}
+  open={e ? true : undefined}
+>
+  <h2 id="v-label" class="visually-hidden" data-label>
+    {e && `${e.heading}, photo ${open! + 1} of ${entries.length}`}
+  </h2>
+  <div class="v-stage" data-stage>
+    <div class="v-frame" data-frame data-i={open} style={e && `--ar:${e.w}/${e.h};--ph:${e.color}`}>
+      {
+        e && (
+          <Fragment
+            set:html={pictureHtml(e.set, {
+              sizes: VIEWER_SIZES,
+              alt: e.alt,
+              w: e.w,
+              h: e.h,
+              loading: 'eager',
+              priority: true,
+            })}
+          />
+        )
+      }
+    </div>
+  </div>
+  <div class="v-bar" hidden={!many}>
+    <button class="v-btn" type="button" data-prev aria-label="Previous photo">←</button>
+    <span class="v-count" data-count>{e && `${open! + 1} / ${entries.length}`}</span>
+    <button class="v-btn" type="button" data-next aria-label="Next photo">→</button>
+  </div>
+  <aside class="v-panel">
+    <a class="v-btn v-close" href={listUrl} data-close autofocus>Close</a>
+    <details class="v-details" open>
+      <summary>Info</summary>
+      <div class="v-info" data-info>{e && <Fragment set:html={infoHtml(e)} />}</div>
+      <div class="v-copy">
+        <button class="v-btn v-copy-btn" type="button" data-copy>Copy link</button>
+        <span class="v-copied" aria-live="polite" data-copied></span>
+      </div>
+    </details>
+  </aside>
+</dialog>
+<script type="application/json" data-viewer-list set:html={JSON.stringify(entries).replace(/</g, '\\u003c')} />

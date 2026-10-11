@@ -1,12 +1,19 @@
 ---
-// TBD: photography grid with category sidebar (later phase). Not linked while the camera item is "soon".
-import Base from '../../layouts/Base.astro';
+// Selected: the curated set from photos/selected.yml, in that order.
+import Gallery from '../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../lib/photos/load';
+import { withBase } from '../../lib/url';
 import { SITE } from '../../data/site';
+
+const { years, selected } = await loadPhotos();
 ---
 
-<Base title={`Photography — ${SITE.name}`}>
-  <main class="stub">
-    <h1>Photography</h1>
-    <p>Coming soon.</p>
-  </main>
-</Base>
+<Gallery
+  years={years}
+  photos={selected}
+  active={{ kind: 'selected' }}
+  heading="Selected photographs"
+  title={`Photography — ${SITE.name}`}
+  description={`Selected photographs by ${SITE.name}.`}
+  listUrl={withBase('/photography/')}
+/>

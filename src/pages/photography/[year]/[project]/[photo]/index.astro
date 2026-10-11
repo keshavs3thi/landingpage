@@ -1,0 +1,40 @@
+---
+// A photo's shareable URL: its project page with the viewer already open on it.
+import type { GetStaticPaths } from 'astro';
+import Gallery from '../../../../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../../../../lib/photos/load';
+import { ogImage } from '../../../../../lib/photos/images';
+import { pageDescription, pageTitle } from '../../../../../lib/photos/entries';
+import type { Project } from '../../../../../lib/photos/types';
+import { withBase } from '../../../../../lib/url';
+import { SITE } from '../../../../../data/site';
+
+export const getStaticPaths = (async () => {
+  const { years } = await loadPhotos();
+  return years.flatMap((y) =>
+    y.projects.flatMap((p) =>
+      p.photos.map((ph, index) => ({
+        params: { year: y.year, project: p.slug, photo: ph.slug },
+        props: { project: p, index },
+      })),
+    ),
+  );
+}) satisfies GetStaticPaths;
+
+const { project, index } = Astro.props as { project: Project; index: number };
+const { years } = await loadPhotos();
+const photo = project.photos[index];
+---
+
+<Gallery
+  years={years}
+  photos={project.photos}
+  active={{ kind: 'project', year: project.year, project: project.slug }}
+  heading={`${project.title}, ${project.year}`}
+  title={pageTitle(photo)}
+  description={pageDescription(photo)}
+  og={await ogImage(photo)}
+  open={index}
+  listUrl={withBase(project.url)}
+  listTitle={`${project.title}, ${project.year} — Photography — ${SITE.name}`}
+/>

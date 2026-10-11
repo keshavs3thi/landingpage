@@ -36,7 +36,7 @@ export const PROJECTS: Project[] = [
     height: 1200,
     alt: 'Placeholder render of a camera', // TBD: describe the final render
     href: '/photography/',
-    status: 'soon',
+    status: 'live',
     accent: '#D9653B', // TBD provisional
     layout: {
       desktop: { x: 88, y: 40, scale: 0.72, rotate: -14, z: 2, floatPhase: 0.0 },
