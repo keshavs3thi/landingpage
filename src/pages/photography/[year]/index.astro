@@ -1,0 +1,27 @@
+---
+// All of one year's photos in a single grid: project order, then file order.
+import type { GetStaticPaths } from 'astro';
+import Gallery from '../../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../../lib/photos/load';
+import type { Year } from '../../../lib/photos/types';
+import { withBase } from '../../../lib/url';
+import { SITE } from '../../../data/site';
+
+export const getStaticPaths = (async () => {
+  const { years } = await loadPhotos();
+  return years.map((y) => ({ params: { year: y.year }, props: { year: y } }));
+}) satisfies GetStaticPaths;
+
+const { year } = Astro.props as { year: Year };
+const { years } = await loadPhotos();
+---
+
+<Gallery
+  years={years}
+  photos={year.photos}
+  active={{ kind: 'year', year: year.year }}
+  heading={`Photographs from ${year.year}`}
+  title={`${year.year} — Photography — ${SITE.name}`}
+  description={`Photographs by ${SITE.name} from ${year.year}.`}
+  listUrl={withBase(year.url)}
+/>

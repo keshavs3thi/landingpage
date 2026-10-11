@@ -1,0 +1,40 @@
+---
+// Masonry grid. Positions come from masonry.ts (build time); each tile is a link to the photo's
+// shareable URL, which the viewer intercepts when JS is available.
+import { withBase } from '../../lib/url';
+import { masonry } from '../../lib/photos/masonry';
+import { GRID_SIZES, gridSet } from '../../lib/photos/images';
+import { pictureHtml } from '../../lib/photos/render';
+import type { Photo } from '../../lib/photos/types';
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+const layout = masonry(photos);
+const sets = await Promise.all(photos.map(gridSet));
+---
+
+<div class="grid-wrap">
+  <ul class="grid" style={layout.grid} data-grid data-max={photos.length <= 4 ? 2 : undefined}>
+    {
+      photos.map((p, i) => (
+        <li class="tile" style={`${layout.tiles[i]};--ar:${p.width}/${p.height};--ph:${p.color}`}>
+          <a href={withBase(p.url)} data-i={i}>
+            <Fragment
+              set:html={pictureHtml(sets[i], {
+                sizes: GRID_SIZES,
+                alt: p.alt,
+                w: p.width,
+                h: p.height,
+                loading: layout.firstRow[i] ? 'eager' : 'lazy',
+                priority: i === 0,
+              })}
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

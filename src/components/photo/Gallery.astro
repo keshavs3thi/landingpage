@@ -1,0 +1,52 @@
+---
+// Page shell shared by Selected, year, project and photo routes: sidebar, mobile bar, grid, viewer.
+import PhotoLayout from '../../layouts/PhotoLayout.astro';
+import Sidebar, { type Active } from './Sidebar.astro';
+import MobileBar from './MobileBar.astro';
+import Grid from './Grid.astro';
+import Viewer from './Viewer.astro';
+import { toEntry } from '../../lib/photos/entries';
+import type { Photo, Year } from '../../lib/photos/types';
+
+interface Props {
+  years: Year[];
+  photos: Photo[];
+  active: Active;
+  heading: string; // page h1 (visually hidden; the sidebar shows where you are)
+  title: string;
+  description: string;
+  og?: { src: string; width: number; height: number };
+  open?: number;
+  listUrl: string;
+  listTitle?: string; // title of the list page, when this page is a photo URL
+}
+
+const { years, photos, active, heading, title, description, og, open, listUrl, listTitle = title } =
+  Astro.props;
+const entries = await Promise.all(photos.map(toEntry));
+---
+
+<PhotoLayout
+  title={title}
+  description={description}
+  ogImage={og?.src}
+  ogWidth={og?.width}
+  ogHeight={og?.height}
+>
+  <div class="ph-shell">
+    <aside class="side">
+      <Sidebar years={years} active={active} idPrefix="d" />
+    </aside>
+    <MobileBar years={years} active={active} />
+    <main class="ph-main">
+      <h1 class="visually-hidden">{heading}</h1>
+      {photos.length ? <Grid photos={photos} /> : <p class="ph-empty">No photos yet.</p>}
+    </main>
+  </div>
+  <Viewer entries={entries} open={open} listUrl={listUrl} listTitle={listTitle} />
+</PhotoLayout>
+
+<script>
+  import '../../scripts/photo-nav';
+  import '../../scripts/photo-viewer';
+</script>

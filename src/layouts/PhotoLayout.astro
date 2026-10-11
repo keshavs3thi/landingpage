@@ -1,0 +1,29 @@
+---
+// Photography pages: quiet, monochrome. Banner while under construction; no nav, grain or vignette.
+import '../styles/photography.css';
+import Head from '../components/Head.astro';
+import Banner from '../components/Banner.astro';
+import { SITE } from '../data/site';
+import { tokenStyle } from '../data/tokens';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  ogWidth?: number;
+  ogHeight?: number;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class:list={[{ 'has-banner': SITE.underConstruction }]} style={tokenStyle}>
+  <head>
+    <Head {...props} />
+  </head>
+  <body class="ph">
+    {SITE.underConstruction && <Banner />}
+    <slot />
+  </body>
+</html>

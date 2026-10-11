@@ -1,0 +1,78 @@
+/* Shared tokens and base styles for every page. Colour values are injected from src/data/tokens.ts;
+   the ones here are fallbacks. Page-specific looks live in global.css (landing) and photography.css. */
+
+:root {
+  --base-bg: #141414;
+  --bg: var(--base-bg); /* landing: set to a deep tint of a project accent by hero.ts */
+  --text: #f6f3ee;
+  --text-muted: #908f8c;
+  --line: #2f2f2e;
+  --ink: var(--text);
+
+  --banner-h: 0px;
+  --pad: clamp(20px, 3vw, 44px);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --font: 'Helvetica Neue', Helvetica, 'Inter Variable', Inter, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+}
+
+html.has-banner {
+  --banner-h: 28px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Under-construction banner */
+.banner {
+  height: var(--banner-h);
+  margin: 0;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}

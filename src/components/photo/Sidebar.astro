@@ -1,0 +1,78 @@
+---
+// Back, Selected, then years (newest first) with their projects. Generated from photos/.
+// The current year is expanded; others collapse behind a toggle (photo-nav.ts).
+import { withBase } from '../../lib/url';
+import type { Year } from '../../lib/photos/types';
+
+export type Active =
+  | { kind: 'selected' }
+  | { kind: 'year'; year: string }
+  | { kind: 'project'; year: string; project: string };
+
+interface Props {
+  years: Year[];
+  active: Active;
+  idPrefix: string; // the sidebar renders twice (desktop + mobile sheet); keeps ids unique
+}
+
+const { years, active, idPrefix } = Astro.props;
+const current = (cond: boolean) => (cond ? 'page' : undefined);
+const activeYear = active.kind === 'selected' ? undefined : active.year;
+---
+
+<nav class="side-nav" aria-label="Photography">
+  <a class="side-back" href={withBase('/')}>Back</a>
+  <ul class="side-list">
+    <li>
+      <a href={withBase('/photography/')} aria-current={current(active.kind === 'selected')}>Selected</a>
+    </li>
+    {
+      years.map((y) => {
+        const open = y.year === activeYear;
+        const id = `${idPrefix}-y${y.year}`;
+        return (
+          <li class="side-year">
+            <div class="side-row">
+              <a
+                href={withBase(y.url)}
+                aria-current={current(active.kind === 'year' && active.year === y.year)}
+                class:list={[{ 'is-open': open }]}
+              >
+                {y.year}
+              </a>
+              {/* A year with only loose photos has nothing to expand. */}
+              {y.projects.length > 0 && (
+                <button
+                  class="side-toggle"
+                  type="button"
+                  aria-expanded={open ? 'true' : 'false'}
+                  aria-controls={id}
+                  data-toggle
+                >
+                  <span class="visually-hidden">Show {y.year} projects</span>
+                  <span aria-hidden="true">{open ? '−' : '+'}</span>
+                </button>
+              )}
+            </div>
+            {y.projects.length > 0 && (
+              <ul class="side-projects" id={id} hidden={!open}>
+                {y.projects.map((p) => (
+                  <li>
+                    <a
+                      href={withBase(p.url)}
+                      aria-current={current(
+                        active.kind === 'project' && active.year === y.year && active.project === p.slug,
+                      )}
+                    >
+                      {p.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

@@ -1,0 +1,64 @@
+---
+// /photography/<year>/<name>/ is either a project page, or the shareable URL of a loose photo
+// (one placed straight in the year folder): the year page with the viewer open on it.
+// The loader guarantees the two never share a name within a year.
+import type { GetStaticPaths } from 'astro';
+import Gallery from '../../../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../../../lib/photos/load';
+import { ogImage } from '../../../../lib/photos/images';
+import { pageDescription, pageTitle } from '../../../../lib/photos/entries';
+import type { Project, Year } from '../../../../lib/photos/types';
+import { withBase } from '../../../../lib/url';
+import { SITE } from '../../../../data/site';
+
+type Props = { kind: 'project'; project: Project } | { kind: 'photo'; year: Year; index: number };
+
+export const getStaticPaths = (async () => {
+  const { years } = await loadPhotos();
+  return years.flatMap((y) => [
+    ...y.projects.map((p) => ({
+      params: { year: y.year, project: p.slug },
+      props: { kind: 'project', project: p } as Props,
+    })),
+    ...y.loose.map((ph) => ({
+      params: { year: y.year, project: ph.slug },
+      props: { kind: 'photo', year: y, index: y.photos.indexOf(ph) } as Props,
+    })),
+  ]);
+}) satisfies GetStaticPaths;
+
+const props = Astro.props as Props;
+const { years } = await loadPhotos();
+const yearTitle = (y: string) => `${y} — Photography — ${SITE.name}`;
+const photo = props.kind === 'photo' ? props.year.photos[props.index] : undefined;
+---
+
+{
+  props.kind === 'project' ? (
+    <Gallery
+      years={years}
+      photos={props.project.photos}
+      active={{ kind: 'project', year: props.project.year, project: props.project.slug }}
+      heading={`${props.project.title}, ${props.project.year}`}
+      title={`${props.project.title}, ${props.project.year} — Photography — ${SITE.name}`}
+      description={
+        props.project.description ??
+        `${props.project.title}: photographs by ${SITE.name}, ${props.project.year}.`
+      }
+      listUrl={withBase(props.project.url)}
+    />
+  ) : (
+    <Gallery
+      years={years}
+      photos={props.year.photos}
+      active={{ kind: 'year', year: props.year.year }}
+      heading={`Photographs from ${props.year.year}`}
+      title={pageTitle(photo!)}
+      description={pageDescription(photo!)}
+      og={await ogImage(photo!)}
+      open={props.index}
+      listUrl={withBase(props.year.url)}
+      listTitle={yearTitle(props.year.year)}
+    />
+  )
+}

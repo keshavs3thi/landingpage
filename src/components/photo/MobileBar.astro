@@ -1,0 +1,24 @@
+---
+// Phones: slim top bar (Back left, Index right). Index opens a full-screen sheet with the sidebar nav.
+import { withBase } from '../../lib/url';
+import type { Year } from '../../lib/photos/types';
+import Sidebar, { type Active } from './Sidebar.astro';
+
+interface Props {
+  years: Year[];
+  active: Active;
+}
+
+const { years, active } = Astro.props;
+---
+
+<header class="mbar">
+  <a class="mbar-btn" href={withBase('/')}>Back</a>
+  <button class="mbar-btn" type="button" aria-haspopup="dialog" data-index-open>Index</button>
+</header>
+<dialog class="sheet" aria-label="Photography index" data-index-sheet>
+  <div class="sheet-head">
+    <button class="mbar-btn" type="button" data-index-close>Close</button>
+  </div>
+  <Sidebar years={years} active={active} idPrefix="m" />
+</dialog>
