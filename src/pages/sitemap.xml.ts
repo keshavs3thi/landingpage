@@ -3,6 +3,7 @@ import type { APIRoute } from 'astro';
 import { SITE } from '../data/site';
 import { loadPhotos } from '../lib/photos/load';
 import { esc } from '../lib/photos/render';
+import { hasResumePdf } from '../lib/resume';
 import { withBase } from '../lib/url';
 
 export const GET: APIRoute = async ({ site }) => {
@@ -10,6 +11,7 @@ export const GET: APIRoute = async ({ site }) => {
   const paths = [
     '/',
     ...(SITE.showAbout ? ['/about/'] : []),
+    ...(hasResumePdf() ? ['/resume/'] : []),
     '/photography/',
     ...years.flatMap((y) => [
       y.url,
