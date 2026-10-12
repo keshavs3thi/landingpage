@@ -1,0 +1,200 @@
+/* Resume page: mirrors the PDF's layout (centred header, ruled sections, dates flush right)
+   in the site's type and colours. Tokens come from tokens.css. */
+
+.resume {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(24px, 5vw, 64px) var(--pad) clamp(64px, 10vw, 128px);
+  display: flex;
+  flex-direction: column;
+}
+
+.resume-head {
+  text-align: center;
+}
+
+.resume h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  margin: 0 0 0.35em;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.resume a {
+  text-underline-offset: 3px;
+}
+
+.resume-contact a {
+  text-decoration: none;
+}
+
+.resume-contact a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* Primary action: solid off-white pill, centred under the header. Sticks to the top while scrolling,
+   so the PDF is always one click away. */
+.resume-download {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(20px, 3vw, 28px) 0 clamp(8px, 2vw, 16px);
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--base-bg);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.45);
+  transition: opacity 200ms var(--ease);
+}
+
+.resume-download:hover {
+  opacity: 0.85;
+}
+
+.resume-section {
+  padding-top: clamp(28px, 4vw, 44px);
+}
+
+.resume h2 {
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.resume-entry + .resume-entry {
+  margin-top: 22px;
+}
+
+.resume-entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 24px;
+}
+
+.resume h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.resume h3 strong {
+  font-weight: 500;
+}
+
+.resume h3 em,
+.resume-subtitle {
+  font-style: italic;
+}
+
+/* Org logo: full colour as supplied, in an 18px slot before the heading. Wrapped headings hang
+   past it, and the subtitle/bullets indent to the text. */
+.has-logo h3 {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  column-gap: 10px;
+  align-items: start;
+}
+
+.resume-logo {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px; /* centre on the first line */
+  object-fit: contain;
+}
+
+.has-logo .resume-subtitle,
+.has-logo .resume-dates,
+.resume-entry.has-logo ul {
+  margin-left: 28px;
+}
+
+.resume-loc,
+.resume-dates {
+  color: var(--text-muted);
+}
+
+.resume-dates {
+  margin: 0;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.resume-subtitle {
+  margin: 2px 0 0;
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.resume-entry ul {
+  margin: 8px 0 0;
+  padding-left: 1.1em;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.resume-entry li + li {
+  margin-top: 4px;
+}
+
+.resume-rows {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.resume-rows > div {
+  display: grid;
+  grid-template-columns: 8em 1fr;
+  gap: 0 16px;
+}
+
+.resume-rows dt {
+  font-weight: 500;
+}
+
+.resume-rows dd {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .resume-entry-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resume-rows > div {
+    grid-template-columns: 1fr;
+  }
+}

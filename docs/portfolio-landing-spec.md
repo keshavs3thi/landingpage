@@ -76,7 +76,7 @@ Drive the page from a single data file (e.g. `src/data/projects.json` or `.ts`).
 1. **Under-construction banner:** thin strip at the very top, small type, e.g. "Site under construction: process books are being added." Controlled by one flag (`SITE.underConstruction`). Removing it must not shift the layout awkwardly. Not dismissible is fine.
 2. **Nav bar:** wordmark "Keshav Sethi" left; **About, Resume, Contact** right.
    - Resume: link to a PDF at `/resume.pdf` (**TBD**: file to be supplied).
-   - Contact: `mailto:me@keshavsethi.com`. A simple mailto link is fine; no form.
+   - Contact: `mailto:ksethi38@gatech.edu`. A simple mailto link is fine; no form.
    - About: **TBD**: route to a stub page, or hide until written (`SITE.showAbout`).
 3. **Hero stage:** the floating cluster, full viewport height minus nav.
 4. **Name + one-liner:** placed in the lower-left of the stage in the primary typeface, sitting *behind* the objects in z-order so objects may overlap it. Text: "Keshav Sethi" as the large line, then the one-liner: "Designer. Splitting my time between Atlanta & the SF Bay Area. I also take pictures." Keep this as a single constant (`SITE.oneLiner`) so it is easy to change. Must stay legible against every accent background state (check contrast, or let text color adapt).

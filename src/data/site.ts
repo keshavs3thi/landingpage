@@ -4,8 +4,8 @@ export const SITE = {
   oneLiner:
     'Designer. Splitting my time between Atlanta & the SF Bay Area. I also take pictures.',
   location: 'Atlanta / SF Bay Area',
-  email: 'me@keshavsethi.com',
-  resumeHref: '/resume.pdf', // TBD: resume PDF to be supplied (place at public/resume.pdf)
+  email: 'ksethi38@gatech.edu',
+  resumeHref: '/resume.pdf', // public/resume.pdf; /resume/ mirrors it and offers it as a download
 
   title: 'Keshav Sethi — Designer',
   description:

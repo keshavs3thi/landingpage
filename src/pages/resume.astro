@@ -1,0 +1,98 @@
+---
+// Resume: the PDF's layout and content restyled in the site theme, with the PDF one click away at the top.
+import Base from '../layouts/Base.astro';
+import '../styles/resume.css';
+import { SITE } from '../data/site';
+import { RESUME } from '../data/resume';
+import { hasResumePdf, logoSrc } from '../lib/resume';
+import { withBase } from '../lib/url';
+
+const hasPdf = hasResumePdf();
+// Resolve logos once; a section reserves a logo slot on every entry if any of its entries has one,
+// so names stay aligned.
+const sections = RESUME.sections.map((s) => {
+  if (!('entries' in s)) return s;
+  const entries = s.entries.map((e) => ({ ...e, logoSrc: logoSrc(e.logo) }));
+  return { ...s, entries, logoSlot: entries.some((e) => e.logoSrc) };
+});
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<Base title={`Resume — ${SITE.name}`} description={`Resume of ${SITE.name}, industrial designer.`}>
+  <main class="resume">
+    <header class="resume-head">
+      <h1>{RESUME.name}</h1>
+      <ul class="resume-contact">
+        {
+          RESUME.contact.map((c) => (
+            <li>{c.href ? <a href={c.href}>{c.label}</a> : c.label}</li>
+          ))
+        }
+      </ul>
+    </header>
+
+    {
+      hasPdf && (
+        <a class="resume-download" href={withBase(SITE.resumeHref)} download="Keshav-Sethi-Resume.pdf">
+          Download PDF <span aria-hidden="true">↓</span>
+        </a>
+      )
+    }
+
+    {
+      sections.map((s) => (
+        <section class="resume-section" aria-labelledby={slug(s.heading)}>
+          <h2 id={slug(s.heading)}>{s.heading}</h2>
+          {'rows' in s ? (
+            <dl class="resume-rows">
+              {s.rows.map((r) => (
+                <div>
+                  <dt>{r.label}</dt>
+                  <dd>{r.text}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            s.entries.map((e) => (
+              <article class:list={['resume-entry', { 'has-logo': s.logoSlot }]}>
+                <div class="resume-entry-head">
+                  <h3>
+                    {s.logoSlot &&
+                      (e.logoSrc ? (
+                        <img
+                          class="resume-logo"
+                          src={withBase(e.logoSrc)}
+                          alt=""
+                          width="18"
+                          height="18"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <span class="resume-logo" aria-hidden="true" />
+                      ))}
+                    <span>
+                      {e.role && e.roleFirst && <em>{e.role}, </em>}
+                      <strong>{e.org}</strong>
+                      {e.role && !e.roleFirst && <em>, {e.role}</em>}
+                      {e.location && <span class="resume-loc"> | {e.location}</span>}
+                    </span>
+                  </h3>
+                  {e.dates && <p class="resume-dates">{e.dates}</p>}
+                </div>
+                {e.subtitle && <p class="resume-subtitle">{e.subtitle}</p>}
+                {e.bullets && (
+                  <ul>
+                    {e.bullets.map((b) => (
+                      <li>{b}</li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+            ))
+          )}
+        </section>
+      ))
+    }
+  </main>
+</Base>
