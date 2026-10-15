@@ -72,9 +72,8 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
                         <span class="resume-logo" aria-hidden="true" />
                       ))}
                     <span>
-                      {e.role && e.roleFirst && <em>{e.role}, </em>}
                       <strong>{e.org}</strong>
-                      {e.role && !e.roleFirst && <em>, {e.role}</em>}
+                      {e.role && <em>, {e.role}</em>}
                       {e.location && <span class="resume-loc"> | {e.location}</span>}
                     </span>
                   </h3>

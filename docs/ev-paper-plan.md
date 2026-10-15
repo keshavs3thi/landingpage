@@ -26,7 +26,7 @@ Convert the .docx to clean semantic HTML once with **mammoth** (a small Node lib
 3. **Shared download button:** move `.resume-download` from `src/styles/resume.css` to a shared `.download-pill` in `src/styles/global.css` and use it on both pages (sticky behavior included). Generalize `inPublic` in `src/lib/resume.ts` into a small exported `inPublic(path)` helper, reused by the new page.
 4. **`src/styles/paper.css` (new):** reading typography in site tokens. ~68ch measure, 17–18px body, 1.65 line height, `--text-muted` for captions and footnotes, `h2`/`h3` styled like the resume's section headings, ruled blockquotes, footnote list in small muted type, and images full measure with captions.
 5. **Not in the nav.** Add `/ev-paper/` to `src/pages/sitemap.xml.ts` so search engines can find it (one-line removal if it should stay unlisted).
-6. **Resume tie-in (optional, later):** the `src/data/resume.ts` "Secondary Research Paper" entry could link to `/ev-paper/`. Not done now, since the link will come from a future page.
+6. **Resume tie-in:** none. The paper was dropped from the resume (Oct 2026), so the only link in will come from the future page.
 
 ## Verification
 - `npm run convert-paper -- ev-paper.docx` runs; review the warnings and diff the HTML against the PDF section by section (headings, footnote numbering, italics, quotes, bibliography).
