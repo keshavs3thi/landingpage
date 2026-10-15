@@ -7,7 +7,7 @@ export const SITE = {
   email: 'ksethi38@gatech.edu',
   resumeHref: '/resume.pdf', // public/resume.pdf; /resume/ mirrors it and offers it as a download
 
-  title: 'Keshav Sethi — Designer',
+  title: 'Keshav Sethi',
   description:
     'Keshav Sethi, designer splitting time between Atlanta and the SF Bay Area. Selected work and photography.',
   ogImage: '/og.png', // TBD: placeholder until final renders; replace with a hero screenshot
