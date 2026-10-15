@@ -169,15 +169,16 @@
 .resume-rows {
   margin: 0;
   display: grid;
-  gap: 8px;
+  grid-template-columns: max-content 1fr; /* label column fits the longest label */
+  gap: 8px 16px;
   font-size: 15px;
   line-height: 1.55;
 }
 
 .resume-rows > div {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 8em 1fr;
-  gap: 0 16px;
+  grid-template-columns: subgrid;
 }
 
 .resume-rows dt {
@@ -194,7 +195,8 @@
     align-items: stretch;
   }
 
-  .resume-rows > div {
+  .resume-rows {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 }

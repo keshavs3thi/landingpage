@@ -6,10 +6,9 @@ export interface ResumeEntry {
   org: string; // bold in the PDF
   logo?: string; // file id in public/logos/ (.svg or .png); shown once the file exists
   role?: string; // italic in the PDF
-  roleFirst?: boolean; // Leadership lists the role before the org
   location?: string;
   dates?: string;
-  subtitle?: string; // italic line under the heading (degree, paper title)
+  subtitle?: string; // italic line under the heading (degree)
   bullets?: string[];
 }
 
@@ -24,8 +23,10 @@ export interface ContactItem {
 
 export const RESUME: { name: string; contact: ContactItem[]; sections: ResumeSection[] } = {
   name: 'Keshav Sethi',
-  // keshavsethi.com (in the PDF) is left off: visitors are already on the site.
+  // Left off from the PDF's contact line: the phone number (kept out of page HTML) and
+  // keshavsethi.com (visitors are already on the site).
   contact: [
+    { label: 'Atlanta, GA & San Francisco, CA' },
     { label: SITE.email, href: `mailto:${SITE.email}` },
     { label: 'linkedin.com/in/keshavs3thi', href: 'https://www.linkedin.com/in/keshavs3thi' },
   ],
@@ -34,21 +35,21 @@ export const RESUME: { name: string; contact: ContactItem[]; sections: ResumeSec
       heading: 'Education',
       entries: [
         {
-          org: 'Georgia Institute of Technology (GT)',
+          org: 'Georgia Institute of Technology',
           logo: 'gatech',
           location: 'Atlanta, GA',
-          dates: 'Expected Graduation: May 2028',
+          dates: 'Expected May 2028',
           subtitle: 'Bachelor of Science in Industrial Design',
         },
         {
-          org: 'Technische Universiteit Eindhoven (TU/e)',
+          org: 'Eindhoven University of Technology (TU/e)',
           logo: 'tue',
           location: 'Eindhoven, Netherlands',
           dates: 'January – July 2026',
           subtitle: 'Industrial Design Exchange Program',
         },
         {
-          org: 'Waterford Kamhlaba United World College of Southern Africa (WKUWCSA)',
+          org: 'Waterford Kamhlaba United World College of Southern Africa',
           logo: 'waterford',
           location: 'Mbabane, eSwatini',
           dates: 'November 2023',
@@ -60,81 +61,74 @@ export const RESUME: { name: string; contact: ContactItem[]; sections: ResumeSec
       heading: 'Experience',
       entries: [
         {
-          org: 'T-Systems',
+          org: 'T-Systems (Deutsche Telekom)',
           logo: 't-systems',
           role: 'InnoLab Intern',
           location: 'Stuttgart, Germany',
-          dates: 'June 2025 – July 2025',
+          dates: 'June – July 2025',
           bullets: [
-            'Built and maintained exhibits and design cases showcasing state-of-the-art technology under the T-Systems portfolio.',
-            'Bridged engineers and stakeholders to enhance Teleoperated Driving, RobCo Precision Manufacturing Robot, and Digital Twin showcases.',
-            'Strategically rebuilt InnoLab visual identity and merchandise, distinguishing the team while remaining identifiably Telekom.',
+            'Built and maintained 4+ technology exhibits for visiting delegations from Volkswagen, Continental, and Mercedes-Benz, university groups, and Deutsche Telekom Group executives.',
+            'Partnered with engineers and stakeholders to refine the Teleoperated Driving, RobCo robot, and Digital Twin demos for client presentations.',
+            'Redesigned the InnoLab visual identity and merchandise, giving the team a distinct look within Deutsche Telekom brand guidelines.',
           ],
         },
         {
           org: 'Method',
           logo: 'method',
-          role: 'User Experience Designer',
+          role: 'UX Design Intern',
           location: 'Santa Clara, CA',
-          dates: 'June 2024 – August 2024',
+          dates: 'June – August 2024',
           bullets: [
-            'Conducted UX research, synthesized findings, and prototyped features as part of a team of 7 product/experience designers.',
-            'Collaborated with a team comprised of 30 product strategists and engineers over 8 weeks to deliver a completed MVP.',
-            'Provided stakeholders with additional designs and features for future consideration.',
-            'Built experience in industry tools such as Figma and Jira, and learned meaningful lessons about product delivery within a design consultancy.',
+            'Conducted foundational UX research for an internal learning management system (LMS), including user interviews and synthesis that shaped the MVP.',
+            'Owned the quiz-taking experience, designing its flows and UI in Figma, and contributed UI components across the product.',
+            'Collaborated with a 7-person design team and 30 product strategists and engineers, tracking work in Jira to deliver a complete Learning Management System MVP in 8 weeks.',
           ],
         },
         {
-          org: 'Freelance Photographer & Media Professional',
-          logo: 'freelance',
+          org: 'Freelance Photographer',
+          logo: 'fuji',
           dates: 'January 2024 – Present',
           bullets: [
-            'Leveraged personal artistic photography passion to establish a freelance entity, specializing in capturing human emotions through portraits.',
-            'Provided unique headshot services for college students, enhancing their professional identity.',
-            'Collaborated with small businesses to elevate their online marketing presence through compelling visual content.',
+            'Shoot portraits and headshots on digital and film for individual clients, and produce visual content for a local small business.',
           ],
         },
       ],
     },
     {
-      heading: 'Relevant Projects',
+      heading: 'Leadership & Involvement',
       entries: [
         {
-          org: 'Secondary Research Paper',
-          logo: 'research-paper',
-          dates: '2023',
-          subtitle: 'The ubiquitization of Electric Vehicles in North America: a blessing or a curse?',
+          org: 'Georgia Tech School of Industrial Design',
+          logo: 'gatech',
+          role: '3D Print Lab Assistant',
+          location: 'Atlanta, GA',
+          dates: 'August 2026 – Present',
           bullets: [
-            'A 4000-word research paper I wrote during my time as an IB Diploma student',
-            'Addresses the research question: “In what ways does the advancement of Electric Vehicle technology and infrastructure perpetuate existing economic and environmental injustices?”',
+            'Maintain, calibrate, and troubleshoot a fleet of 16 FDM 3D printers serving 350+ Industrial Design students.',
+            'Help students optimize their parts for FDM manufacturing, improving print strength and surface quality while minimizing material waste.',
           ],
         },
-      ],
-    },
-    {
-      heading: 'Leadership',
-      entries: [
+        {
+          org: 'Georgia Tech Wreck Racing',
+          logo: 'wreck',
+          role: 'Interior & Controls Design Engineer',
+          location: 'Atlanta, GA',
+          dates: 'August 2024 – May 2025',
+          bullets: [
+            'Co-designed the sheet-metal transmission tunnel in CAD for the Conquest TS4’s driveline swap, fitting an Audi S4 4.2L V8, 6-speed manual, and AWD into a 1987 Chrysler Conquest.',
+            'Adapted the stock Conquest gauges to work with the Audi ECU, and co-designed the bracket mounting the Audi steering wheel and shaft into the Conquest body.',
+            'Car placed 1st in Concours, 3rd in class in Autocross, and 4th overall at the 2025 Grassroots Motorsports $2,000 Challenge.',
+          ],
+        },
         {
           org: 'UWC Africa Week',
-          logo: 'uwc-africa-week',
+          logo: 'waterford',
           role: 'Media & Marketing Executive',
-          roleFirst: true,
+          location: 'Mbabane, eSwatini',
           dates: 'May 2022 – August 2023',
           bullets: [
-            'UWC Africa Week is an annual student-led event that has grown to be the largest student-led event at Waterford Kamhlaba UWCSA, arguably eSwatini and one of the largest on the African continent.',
-            'Contributed as the Media and Marketing Executive to UWC Africa Week, a week-long celebration highlighting African culture, history, and future through expert panels, interactive activities, and cultural festivities, enriching the international school experience.',
-            'Introduced a fresh design language and collaborated with a media team to enhance social media engagement, resulting in increased foot traffic at events.',
-          ],
-        },
-        {
-          org: 'First Robotics',
-          logo: 'first',
-          role: 'Team Lead',
-          roleFirst: true,
-          dates: 'Seasonal: 2016 – 2021',
-          bullets: [
-            'Have led and been involved in various robotics teams and projects, climbing from a junior team member to a project lead.',
-            'Experience with: Lego Mindstorms NXT & EV3, and competition in First Robotics: FLL, FTC, FRC. Was part of national-qualifying FLL and national champion FRC teams.',
+            'Led a 4-person media and marketing team for eSwatini’s largest student-run event, a week of panels, performances, and exhibitions celebrating Africa’s culture, history, and future.',
+            'Drove the event’s first large-scale expansion of merchandise, social media, and website, growing a historically word-of-mouth event into a branded presence with a new visual design language.',
           ],
         },
       ],
@@ -142,12 +136,20 @@ export const RESUME: { name: string; contact: ContactItem[]; sections: ResumeSec
     {
       heading: 'Skills',
       rows: [
-        { label: 'Technical', text: 'Figma, Adobe Suite, AUTODESK Fusion 360, Keyshot, FDM Printing' },
-        { label: 'Languages', text: 'Hindi (native), English (native), Spanish (intermediate)' },
         {
-          label: 'Concepts',
-          text: 'Design for Manufacturing (DFM), User-Centered Design, UX Research, Rapid Prototyping, 3D Modeling',
+          label: '3D & Physical Prototyping',
+          text: 'Woodworking, Laser Cutting, FDM 3D Printing, Rapid Prototyping, Design for Manufacturing (DFM), Electronics Prototyping, Silicone Casting & Mold Making, Foam Modeling, CNC Milling',
         },
+        { label: 'CAD & Rendering', text: 'Autodesk Fusion, Blender, KeyShot, Vizcom, Solidworks' },
+        {
+          label: 'UX & Visual',
+          text: 'Figma, Jira, Adobe Photoshop, Illustrator, InDesign, Lightroom, Photography (Digital & Film)',
+        },
+        {
+          label: 'Methods',
+          text: 'User Research, User Interviews, Research Synthesis, UI Design, User-Centered Design, Visual Identity & Branding',
+        },
+        { label: 'Languages', text: 'Hindi (native), English (native), Spanish (intermediate)' },
       ],
     },
   ],
