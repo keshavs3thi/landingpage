@@ -132,7 +132,7 @@ Rules:
 - Source files: **JPEG, sRGB, about 2400-3000px on the long edge, quality 85-90.** Never full-resolution originals. The build should warn on files above about 8MB or about 3200px. In Lightroom, export metadata as "All Except Person & Location Info" (keeps camera/lens, drops GPS).
 - Source JPEGs are **gitignored and never committed**; they live only in the local `photos/` folder. The `.yml` files are committed.
 
-**Publishing:** commit any code/yml changes, then run `npm run deploy`. It builds locally and pushes only `dist/` (resized, EXIF-stripped images) to the `gh-pages` branch, which GitHub Pages serves (Settings → Pages → Deploy from a branch → `gh-pages` / root). There is no CI build, since CI has no access to the photos. Document this routine in the README, including how to add a photo, a project, and a year, and how to edit `selected.yml`.
+**Publishing:** commit any code/yml changes, then run `npm run deploy`. It builds locally and pushes only `dist/` (resized, EXIF-stripped images) to the `main` branch of the `keshavs3thi.github.io` repo, which serves https://keshavsethi.com/. There is no CI build, since CI has no access to the photos. Document this routine in the README, including how to add a photo, a project, and a year, and how to edit `selected.yml`.
 
 ## 9. Image pipeline (performance without visible quality loss)
 

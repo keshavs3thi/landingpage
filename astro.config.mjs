@@ -2,11 +2,11 @@
 import { defineConfig } from 'astro/config';
 import photoReport from './src/integrations/photo-report.ts';
 
-// GitHub Pages project site: served at https://keshavs3thi.github.io/landingpage/
-// Moving to a custom domain: set `base: '/'`, update `site`, add public/CNAME.
+// Served at https://keshavsethi.com/ from the keshavs3thi.github.io repo (see scripts/deploy.mjs).
+// public/CNAME keeps the custom domain attached on every deploy.
 export default defineConfig({
-  site: 'https://keshavs3thi.github.io',
-  base: '/landingpage/',
+  site: 'https://keshavsethi.com',
+  base: '/',
   output: 'static',
   integrations: [photoReport()],
 });

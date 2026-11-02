@@ -1,4 +1,4 @@
-// Prefix a root-relative path with the configured base (e.g. /landingpage/).
+// Prefix a root-relative path with the configured base ("/" today; e.g. /landingpage/ for a project site).
 export function withBase(path: string): string {
   if (/^([a-z]+:|\/\/|#)/i.test(path)) return path; // absolute URL, mailto:, anchor
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
