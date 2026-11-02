@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Source GIFs for workshop hero videos: too large to commit; convert to MP4 and use heroVideo
+workshop/**/*.gif
+
+# Raw CAD exports for workshop 3D models: run npm run optimize-model and commit model.glb instead
+workshop/**/*-src.glb
+workshop/**/*-src.gltf
+
+# Source photos stay on this machine; `npm run deploy` publishes only the resized, EXIF-stripped copies.
+# The .yml files (selected.yml, project.yml, year.yml) are still committed.
+photos/**/*.jpg
+photos/**/*.jpeg
+photos/**/*.JPG
+photos/**/*.JPEG
