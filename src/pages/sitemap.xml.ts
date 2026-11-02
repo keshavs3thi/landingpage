@@ -5,13 +5,16 @@ import { loadPhotos } from '../lib/photos/load';
 import { esc } from '../lib/photos/render';
 import { hasResumePdf } from '../lib/resume';
 import { withBase } from '../lib/url';
+import { getWorkshop } from '../lib/workshop';
 
 export const GET: APIRoute = async ({ site }) => {
   const { years } = await loadPhotos();
+  const workshop = SITE.showWorkshop ? await getWorkshop() : [];
   const paths = [
     '/',
     ...(SITE.showAbout ? ['/about/'] : []),
     ...(hasResumePdf() ? ['/resume/'] : []),
+    ...(SITE.showWorkshop ? ['/workshop/', ...workshop.flatMap((w) => w.url ?? [])] : []),
     '/photography/',
     ...years.flatMap((y) => [
       y.url,

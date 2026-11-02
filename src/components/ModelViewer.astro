@@ -1,0 +1,43 @@
+---
+// A workshop project's 3D model in place of its hero: orbits on its own, drag to turn, button to explode.
+// The hero still is the poster while three.js loads, and stays put if WebGL isn't available.
+import { Picture } from 'astro:assets';
+import type { WorkshopItem } from '../lib/workshop';
+
+interface Props {
+  it: WorkshopItem;
+  widths: number[];
+  sizes: string;
+}
+
+const { it, widths, sizes } = Astro.props;
+const ws = widths.filter((w) => w <= it.hero.width);
+---
+
+<div class="model-viewer" data-model-viewer data-src={it.modelUrl} data-spread={it.modelExplode}>
+  <Picture
+    class="mv-poster"
+    src={it.hero}
+    alt={it.heroAlt}
+    formats={['avif', 'webp']}
+    widths={ws.length ? ws : [it.hero.width]}
+    sizes={sizes}
+    loading="eager"
+    fetchpriority="high"
+  />
+  <canvas
+    tabindex="0"
+    role="img"
+    aria-label={`Interactive 3D model of ${it.title}. Arrow keys rotate, plus and minus zoom.`}></canvas>
+  <p class="mv-hint" data-hint aria-hidden="true"></p>
+  <p class="mv-status" data-status aria-live="polite">Loading 3D model…</p>
+  <div class="mv-controls">
+    <button type="button" data-rotate>Pause</button>
+    <button type="button" data-explode>Explode</button>
+    <button type="button" data-reset>Reset view</button>
+  </div>
+</div>
+
+<script>
+  import '../scripts/model-viewer';
+</script>

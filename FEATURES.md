@@ -6,3 +6,4 @@
 6. phase 2 resume: rebuild /resume/ as a storytelling page instead of a restyled copy of the PDF (lunet-family layout from the spec: short intro, a chapter per role/project with images and links into the process books). keep the download PDF button at the top.
 7. random-projects
 8. spotlight too grey, autocenters instead of turning off
+9. rebuilding video from gif, just have videos?

@@ -1,0 +1,121 @@
+---
+// One workshop project: hero, title block, metadata, the index.md text, then the gallery.
+import { getImage, Picture } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ModelViewer from '../../components/ModelViewer.astro';
+import WorkshopHero from '../../components/WorkshopHero.astro';
+import '../../styles/workshop.css';
+import { SITE } from '../../data/site';
+import { withBase } from '../../lib/url';
+import { getWorkshop, type WorkshopItem } from '../../lib/workshop';
+
+export async function getStaticPaths() {
+  const pages = (await getWorkshop()).filter((it) => it.url);
+  return pages.map((it, i) => ({
+    params: { slug: it.slug },
+    props: { it, next: pages[(i + 1) % pages.length] },
+  }));
+}
+
+interface Props {
+  it: WorkshopItem;
+  next: WorkshopItem;
+}
+
+const { it, next } = Astro.props;
+const { Content } = await render(it.entry);
+
+const ogWidth = Math.min(1600, it.hero.width);
+const og = await getImage({ src: it.hero, width: ogWidth, format: 'jpeg', quality: 82 });
+const ogHeight = Math.round((ogWidth * it.hero.height) / it.hero.width);
+
+const meta = [
+  ['Year', String(it.year)],
+  ['Context', it.context],
+  ['Role', it.role],
+  ['Tools', it.tools?.join(', ')],
+  ['Team', it.team],
+].filter((m): m is [string, string] => !!m[1]);
+const widths = (w: number) => [800, 1400, 2000].filter((x) => x <= w);
+---
+
+<Base
+  title={`${it.title} — ${SITE.name}`}
+  description={it.summary}
+  ogImage={og.src}
+  ogWidth={ogWidth}
+  ogHeight={ogHeight}
+  noindex={!SITE.showWorkshop}
+>
+  <main class="workshop ws-page">
+    <a class="ws-back" href={withBase('/workshop/')}><span aria-hidden="true">←</span> Workshop</a>
+
+    <header class="ws-page-head">
+      <h1>{it.title}</h1>
+      <p class="ws-tagline">{it.tagline}</p>
+    </header>
+
+    <div class="ws-hero">
+      {
+        it.modelUrl ? (
+          <ModelViewer it={it} widths={[800, 1400, 2000]} sizes="(max-width: 1240px) calc(100vw - 40px), 1160px" />
+        ) : (
+          <WorkshopHero
+            it={it}
+            widths={[800, 1400, 2000]}
+            sizes="(max-width: 1240px) calc(100vw - 40px), 1160px"
+            eager
+            priority
+          />
+        )
+      }
+    </div>
+
+    <div class="ws-body">
+      <dl class="ws-facts">
+        {
+          meta.map(([k, v]) => (
+            <div>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <div class="ws-prose">
+        <Content />
+      </div>
+    </div>
+
+    {
+      !!it.gallery?.length && (
+        <div class="ws-gallery">
+          {it.gallery.map((g) => (
+            <figure>
+              <Picture
+                src={g.src}
+                alt={g.alt}
+                formats={['avif', 'webp']}
+                widths={widths(g.src.width)}
+                sizes="(max-width: 1240px) calc(100vw - 40px), 1160px"
+              />
+              {g.caption && <figcaption>{g.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )
+    }
+
+    <footer class="ws-foot">
+      <a href={withBase('/workshop/')}><span aria-hidden="true">←</span> All projects</a>
+      {
+        next !== it && (
+          <a href={withBase(next.url!)}>
+            Next: {next.title} <span aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </footer>
+  </main>
+</Base>

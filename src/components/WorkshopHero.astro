@@ -1,0 +1,82 @@
+---
+// A workshop project's hero: the responsive still, or a muted looping video with the still as poster.
+// With heroLink set, the hero opens that URL in a new tab instead of following the row's link.
+import { getImage, Picture } from 'astro:assets';
+import type { WorkshopItem } from '../lib/workshop';
+
+interface Props {
+  it: WorkshopItem;
+  widths: number[];
+  sizes: string;
+  eager?: boolean;
+  priority?: boolean;
+}
+
+const { it, widths, sizes, eager = false, priority = false } = Astro.props;
+const ws = widths.filter((w) => w <= it.hero.width);
+const poster = it.video
+  ? await getImage({ src: it.hero, width: ws[ws.length - 1] ?? it.hero.width, format: 'webp' })
+  : undefined;
+
+const linkLabel = it.heroLink?.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+const Wrap = it.heroLink ? 'a' : Fragment;
+const wrapProps = it.heroLink
+  ? {
+      class: 'ws-hero-link',
+      href: it.heroLink,
+      target: '_blank',
+      rel: 'noopener',
+      'aria-label': `${it.title}: open ${linkLabel} (new tab)`,
+    }
+  : {};
+---
+
+<Wrap {...wrapProps}>
+  {
+    it.video && poster ? (
+      <video
+        data-ws-video
+        src={it.video}
+        poster={poster.src}
+        width={it.hero.width}
+        height={it.hero.height}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload={eager ? 'auto' : 'metadata'}
+        aria-label={it.heroAlt}
+      />
+    ) : (
+      <Picture
+        src={it.hero}
+        alt={it.heroAlt}
+        formats={['avif', 'webp']}
+        widths={ws.length ? ws : [it.hero.width]}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : undefined}
+      />
+    )
+  }
+  {
+    it.heroLink && (
+      <span class="ws-hero-link-chip" aria-hidden="true">
+        {linkLabel} ↗
+      </span>
+    )
+  }
+</Wrap>
+
+<script>
+  // Reduced motion: hold hero videos on their poster, with controls to play on request.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (const v of document.querySelectorAll<HTMLVideoElement>('video[data-ws-video]')) {
+      v.autoplay = false;
+      v.pause();
+      v.currentTime = 0;
+      if (!v.closest('a')) v.controls = true; // no controls inside a link
+
+    }
+  }
+</script>

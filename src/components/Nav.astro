@@ -12,6 +12,13 @@ const hasResume = hasResumePdf();
   <nav aria-label="Primary">
     <ul>
       {
+        SITE.showWorkshop && (
+          <li>
+            <a href={withBase('/workshop/')}>Workshop</a>
+          </li>
+        )
+      }
+      {
         SITE.showAbout && (
           <li>
             <a href={withBase('/about/')}>About</a>

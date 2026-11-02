@@ -17,5 +17,9 @@ export const SITE = {
   showAbout: true, // TBD: About links to a stub page; set false to hide it until written
   grain: true,
 
+  // Workshop (mini projects, /workshop/). Hidden = reachable by URL only: no nav link, not in the
+  // sitemap, and marked noindex. Set true to put it in the nav.
+  showWorkshop: false,
+
   baseBg: '#141414', // dark stage; hover shifts to a deep tint of each accent
 } as const;
