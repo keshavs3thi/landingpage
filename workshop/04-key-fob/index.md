@@ -6,7 +6,7 @@ tagline: Modeling exercise
 year: 2026
 context: ID 2101 Digital Design Methods · Georgia Institute of Technology         # Location or course, e.g. "ID 2202 · Georgia Tech"
 summary: Interactive 3D visualizer. Imagine how your ditonic colorscheme will look blown up and with motion          # 2–3 sentences for the Workshop list
-#hero: ./poster.jpg       # still: shown while the video loads and in link previews
+hero: ./poster.jpg       # still: shown while the video loads and in link previews
 heroVideo: ./hero.mp4   # optional looping video (converted from hero2.gif)
 heroAlt: A looping gif of the visualizer interaction          # Describe the image for screen readers
 heroLink: https://keshavsethi.com/viz   # optional: clicking the hero opens this in a new tab
@@ -14,7 +14,7 @@ heroLink: https://keshavsethi.com/viz   # optional: clicking the hero opens this
 # modelExplode: 1        # optional: how far apart parts go in the exploded view (2 = twice as far)
 order: 1          # Position on the list (lower comes first)
 page: true        # false = listed on Workshop, but no page of its own
-draft: false       # true = hidden everywhere
+draft: true       # true = hidden everywhere
 role:             # Optional
 tools: [DFMA (Design for Manufacturing and Assembly), Fusion 360]         # Optional, e.g. [Fusion 360, 3D printer]
 team:             # Optional
