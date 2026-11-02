@@ -123,8 +123,9 @@ photos:                   # optional per-photo overrides, keyed by filename
 
 Rules:
 - Years and projects come from folder names. Years sort newest first.
-- **Projects are optional.** A photo placed straight in a year folder (`photos/2025/03-harbor.jpg`) shows on that year's page after the year's projects, can be listed in `selected.yml` (`- 2025/03-harbor.jpg`), and gets the URL `/photography/2025/harbor/`; its info panel shows just the year. An optional `photos/<year>/year.yml` takes the same defaults and `photos:` overrides as `project.yml`. A loose photo's slug may not match a project folder name in the same year (the build fails with a clear message). A year with only loose photos has no expand toggle in the sidebar.
+- **Projects are optional.** A photo placed straight in a year folder (`photos/2025/03-harbor.jpg`) shows on that year's page after the year's projects, can be listed in `selected.yml` (`- 2025/03-harbor.jpg`), and gets the URL `/photography/2025/03-harbor/`; its info panel shows just the year. An optional `photos/<year>/year.yml` takes the same defaults and `photos:` overrides as `project.yml`. A loose photo's slug may not match a project folder name in the same year (the build fails with a clear message). A year with only loose photos has no expand toggle in the sidebar.
 - Photo order within a project comes from the filename number prefix.
+- A photo's URL is its full filename, lowercased, with spaces and punctuation turned into dashes (`KESH8833-Enhanced-NR.JPG` → `kesh8833-enhanced-nr`). Files don't need renaming.
 - EXIF (camera, lens, aperture, shutter, ISO, date) is read from each file automatically at build when present. Values in `project.yml` override or fill in anything missing (essential for film scans).
 - `camera`, `lens`, and an optional `date` (`YYYY-MM-DD`) may be set per project or per photo. For `medium: film`, the EXIF date is hidden (it is usually the scan date) unless `date` is set.
 - Warn at build (do not crash) when a photo in `selected.yml` doesn't exist, when a project has no `project.yml`, or when a field is missing.

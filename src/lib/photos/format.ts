@@ -36,10 +36,10 @@ export function date(raw?: string | Date): string | undefined {
 export const altFallback = (name: string, location: string | undefined, year: string) =>
   [name, location, year].filter(Boolean).join(', ');
 
-// "01-harbor.jpg" -> "harbor"; unnumbered names keep their full base name.
+// The whole base name, so any camera or Lightroom filename works: "01-Harbor Walk.jpg" -> "01-harbor-walk".
 export function slugFromFile(file: string): string {
-  const base = file.replace(/\.[^.]+$/, '').replace(/^\d+[-_ .]*/, '') || file.replace(/\.[^.]+$/, '');
-  return base
+  return file
+    .replace(/\.[^.]+$/, '')
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
@@ -47,12 +47,14 @@ export function slugFromFile(file: string): string {
     .replace(/^-|-$/g, '');
 }
 
-// Numbered files first by number, then unnumbered alphabetically.
+// Numbered files first by number, then unnumbered in natural order (KESH-29 before KESH-133).
+const natural = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+
 export function fileOrder(a: string, b: string): number {
   const na = a.match(/^(\d+)/)?.[1];
   const nb = b.match(/^(\d+)/)?.[1];
-  if (na && nb) return Number(na) - Number(nb) || a.localeCompare(b);
+  if (na && nb) return Number(na) - Number(nb) || natural(a, b);
   if (na) return -1;
   if (nb) return 1;
-  return a.localeCompare(b);
+  return natural(a, b);
 }
