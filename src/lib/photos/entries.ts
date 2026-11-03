@@ -3,7 +3,7 @@ import { SITE } from '../../data/site';
 import { withBase } from '../url';
 import { viewerSet } from './images';
 import type { ViewerEntry } from './render';
-import type { Photo, PhotoInfo } from './types';
+import type { Category, Photo, PhotoInfo, Project } from './types';
 
 const LABELS: [keyof PhotoInfo, string][] = [
   ['location', 'Location'],
@@ -17,12 +17,22 @@ const LABELS: [keyof PhotoInfo, string][] = [
   ['date', 'Date'],
 ];
 
-// "Morning Tide — Savannah, GA, 2025 — Keshav Sethi"
+const where = (p: Photo) => [p.info.location, p.year].filter(Boolean).join(', ');
+
+// "Morning Tide — Savannah, GA, 2025 — Keshav Sethi" (location and year only when known)
 export const pageTitle = (p: Photo) =>
-  `${p.title ?? p.projectTitle ?? 'Photograph'} — ${[p.info.location, p.year].filter(Boolean).join(', ')} — ${SITE.name}`;
+  [p.title ?? p.projectTitle ?? 'Photograph', where(p) || p.categoryTitle, SITE.name].join(' — ');
 
 export const pageDescription = (p: Photo) =>
   `${[p.title ?? p.projectTitle ?? 'Photograph', p.info.location, p.year].filter(Boolean).join(', ')}. Photograph by ${SITE.name}.`;
+
+export const categoryTitle = (c: Category) => `${c.title} — Photography — ${SITE.name}`;
+
+// A category page's sections, in the same order as category.photos: loose photos, then projects.
+export const sectionsOf = (c: Category): { photos: Photo[]; project?: Project }[] => [
+  { photos: c.loose },
+  ...c.projects.map((p) => ({ photos: p.photos, project: p })),
+];
 
 export async function toEntry(p: Photo): Promise<ViewerEntry> {
   return {
@@ -36,7 +46,7 @@ export async function toEntry(p: Photo): Promise<ViewerEntry> {
     color: p.color,
     set: await viewerSet(p),
     project: p.projectTitle && p.projectUrl ? { title: p.projectTitle, url: withBase(p.projectUrl) } : undefined,
-    year: { label: p.year, url: withBase(p.yearUrl) },
+    category: { label: p.categoryTitle, url: withBase(p.categoryUrl) },
     description: p.projectDescription,
     info: LABELS.filter(([k]) => p.info[k]).map(([k, label]) => [label, p.info[k]!]),
   };

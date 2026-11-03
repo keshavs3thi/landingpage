@@ -3,7 +3,7 @@
 // properties; photography.css turns them into absolute positions. No runtime JS, no layout shift,
 // and the DOM stays in curated order.
 
-export const COLUMN_COUNTS = [1, 2, 3] as const;
+export const COLUMN_COUNTS = [2, 3] as const; // phones, everything wider
 const GAP_RATIO = 14 / 380; // gap as a fraction of a typical column width, for comparing columns
 
 export interface Masonry {

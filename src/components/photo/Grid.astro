@@ -9,27 +9,29 @@ import type { Photo } from '../../lib/photos/types';
 
 interface Props {
   photos: Photo[];
+  offset?: number; // index of this grid's first photo in the page's viewer list
+  eager?: boolean; // first grid on the page: load its top row eagerly
 }
 
-const { photos } = Astro.props;
+const { photos, offset = 0, eager = true } = Astro.props;
 const layout = masonry(photos);
 const sets = await Promise.all(photos.map(gridSet));
 ---
 
 <div class="grid-wrap">
-  <ul class="grid" style={layout.grid} data-grid data-max={photos.length <= 4 ? 2 : undefined}>
+  <ul class="grid" style={layout.grid} data-grid>
     {
       photos.map((p, i) => (
         <li class="tile" style={`${layout.tiles[i]};--ar:${p.width}/${p.height};--ph:${p.color}`}>
-          <a href={withBase(p.url)} data-i={i}>
+          <a href={withBase(p.url)} data-i={offset + i}>
             <Fragment
               set:html={pictureHtml(sets[i], {
                 sizes: GRID_SIZES,
                 alt: p.alt,
                 w: p.width,
                 h: p.height,
-                loading: layout.firstRow[i] ? 'eager' : 'lazy',
-                priority: i === 0,
+                loading: eager && layout.firstRow[i] ? 'eager' : 'lazy',
+                priority: eager && i === 0,
               })}
             />
           </a>

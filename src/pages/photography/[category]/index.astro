@@ -1,0 +1,28 @@
+---
+// A category page: its loose photos, then a section per project.
+import type { GetStaticPaths } from 'astro';
+import Gallery from '../../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../../lib/photos/load';
+import { categoryTitle, sectionsOf } from '../../../lib/photos/entries';
+import type { Category } from '../../../lib/photos/types';
+import { withBase } from '../../../lib/url';
+import { SITE } from '../../../data/site';
+
+export const getStaticPaths = (async () => {
+  const { categories } = await loadPhotos();
+  return categories.map((c) => ({ params: { category: c.slug }, props: { category: c } }));
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.props as { category: Category };
+const { categories } = await loadPhotos();
+---
+
+<Gallery
+  categories={categories}
+  sections={sectionsOf(category)}
+  active={{ kind: 'category', category: category.slug }}
+  heading={`${category.title}: photographs`}
+  title={categoryTitle(category)}
+  description={`Photographs of ${category.title.toLowerCase()} by ${SITE.name}.`}
+  listUrl={withBase(category.url)}
+/>

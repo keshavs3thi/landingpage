@@ -1,28 +1,38 @@
 ---
-// Page shell shared by Selected, year, project and photo routes: sidebar, mobile bar, grid, viewer.
+// Page shell shared by Selected, category and photo routes: sidebar, mobile bar, grids, viewer.
+// A page is a list of sections: the loose photos, then one per project (small title and
+// description beside its grid, hairlines above and below). The viewer steps through all of them.
 import PhotoLayout from '../../layouts/PhotoLayout.astro';
 import Sidebar, { type Active } from './Sidebar.astro';
 import MobileBar from './MobileBar.astro';
 import Grid from './Grid.astro';
 import Viewer from './Viewer.astro';
 import { toEntry } from '../../lib/photos/entries';
-import type { Photo, Year } from '../../lib/photos/types';
+import type { Category, Photo, Project } from '../../lib/photos/types';
+
+export interface Section {
+  photos: Photo[];
+  project?: Project;
+}
 
 interface Props {
-  years: Year[];
-  photos: Photo[];
+  categories: Category[];
+  sections: Section[];
   active: Active;
   heading: string; // page h1 (visually hidden; the sidebar shows where you are)
   title: string;
   description: string;
   og?: { src: string; width: number; height: number };
-  open?: number;
+  open?: number; // index into all photos on the page, in section order
   listUrl: string;
   listTitle?: string; // title of the list page, when this page is a photo URL
 }
 
-const { years, photos, active, heading, title, description, og, open, listUrl, listTitle = title } =
+const { categories, sections, active, heading, title, description, og, open, listUrl, listTitle = title } =
   Astro.props;
+const shown = sections.filter((s) => s.photos.length);
+const photos = shown.flatMap((s) => s.photos);
+const offsets = shown.map((_, i) => shown.slice(0, i).reduce((n, s) => n + s.photos.length, 0));
 const entries = await Promise.all(photos.map(toEntry));
 ---
 
@@ -35,12 +45,29 @@ const entries = await Promise.all(photos.map(toEntry));
 >
   <div class="ph-shell">
     <aside class="side">
-      <Sidebar years={years} active={active} idPrefix="d" />
+      <Sidebar categories={categories} active={active} idPrefix="d" />
     </aside>
-    <MobileBar years={years} active={active} />
+    <MobileBar categories={categories} active={active} />
     <main class="ph-main">
       <h1 class="visually-hidden">{heading}</h1>
-      {photos.length ? <Grid photos={photos} /> : <p class="ph-empty">No photos yet.</p>}
+      {photos.length === 0 && <p class="ph-empty">No photos yet.</p>}
+      {
+        shown.map((s, i) =>
+          s.project ? (
+            <section class="proj" id={s.project.slug} aria-labelledby={`proj-${s.project.slug}`}>
+              <div class="proj-text">
+                <h2 class="proj-title" id={`proj-${s.project.slug}`}>
+                  {s.project.title}
+                </h2>
+                {s.project.description && <p class="proj-desc">{s.project.description}</p>}
+              </div>
+              <Grid photos={s.photos} offset={offsets[i]} eager={i === 0} />
+            </section>
+          ) : (
+            <Grid photos={s.photos} offset={offsets[i]} eager={i === 0} />
+          ),
+        )
+      }
     </main>
   </div>
   <Viewer entries={entries} open={open} listUrl={listUrl} listTitle={listTitle} />

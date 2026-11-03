@@ -1,24 +1,35 @@
 ---
-// Phones: slim top bar (Back left, Index right). Index opens a full-screen sheet with the sidebar nav.
+// Phones: one slim sticky bar. Back on the left; Selected and the categories as small links on the
+// right (scrolls sideways if it ever overflows). Projects show as sections on the category page.
 import { withBase } from '../../lib/url';
-import type { Year } from '../../lib/photos/types';
-import Sidebar, { type Active } from './Sidebar.astro';
+import type { Category } from '../../lib/photos/types';
+import type { Active } from './Sidebar.astro';
 
 interface Props {
-  years: Year[];
+  categories: Category[];
   active: Active;
 }
 
-const { years, active } = Astro.props;
+const { categories, active } = Astro.props;
+const links = [
+  { label: 'Selected', url: '/photography/', current: active.kind === 'selected' },
+  ...categories.map((c) => ({
+    label: c.title,
+    url: c.url,
+    current: active.kind === 'category' && active.category === c.slug,
+  })),
+];
 ---
 
 <header class="mbar">
-  <a class="mbar-btn" href={withBase('/')}>Back</a>
-  <button class="mbar-btn" type="button" aria-haspopup="dialog" data-index-open>Index</button>
+  <a class="mbar-btn mbar-back" href={withBase('/')}>Back</a>
+  <nav class="mbar-nav" aria-label="Photography">
+    {
+      links.map((l) => (
+        <a class="mbar-btn" href={withBase(l.url)} aria-current={l.current ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
 </header>
-<dialog class="sheet" aria-label="Photography index" data-index-sheet>
-  <div class="sheet-head">
-    <button class="mbar-btn" type="button" data-index-close>Close</button>
-  </div>
-  <Sidebar years={years} active={active} idPrefix="m" />
-</dialog>

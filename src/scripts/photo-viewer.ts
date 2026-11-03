@@ -24,12 +24,10 @@ function init(dialog: HTMLDialogElement, list: ViewerEntry[]) {
   const label = $('[data-label]');
   const count = $('[data-count]');
   const copied = $('[data-copied]');
-  const details = $<HTMLDetailsElement>('.v-details');
   const panel = $('.v-panel');
   const bar = $('.v-bar');
   const tiles = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-grid] a[data-i]'));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const mobile = matchMedia('(max-width: 760px)');
   const listUrl = dialog.dataset.listUrl!;
   const listTitle = dialog.dataset.listTitle!;
   const n = list.length;
@@ -106,7 +104,6 @@ function init(dialog: HTMLDialogElement, list: ViewerEntry[]) {
     if (dialog.open && !dialog.matches(':modal')) dialog.close(); // upgrade the server-rendered open dialog
     if (!dialog.open) dialog.showModal();
     root.classList.add('viewer-open');
-    details.open = !mobile.matches;
     if (push) {
       history.pushState({ viewer: i }, '', list[i].url);
       pushed = true;

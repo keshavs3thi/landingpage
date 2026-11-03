@@ -8,7 +8,7 @@ import { withBase } from '../lib/url';
 import { getWorkshop } from '../lib/workshop';
 
 export const GET: APIRoute = async ({ site }) => {
-  const { years } = await loadPhotos();
+  const { categories } = await loadPhotos();
   const workshop = SITE.showWorkshop ? await getWorkshop() : [];
   const paths = [
     '/',
@@ -16,11 +16,7 @@ export const GET: APIRoute = async ({ site }) => {
     ...(hasResumePdf() ? ['/resume/'] : []),
     ...(SITE.showWorkshop ? ['/workshop/', ...workshop.flatMap((w) => w.url ?? [])] : []),
     '/photography/',
-    ...years.flatMap((y) => [
-      y.url,
-      ...y.projects.flatMap((p) => [p.url, ...p.photos.map((ph) => ph.url)]),
-      ...y.loose.map((ph) => ph.url),
-    ]),
+    ...categories.flatMap((c) => [c.url, ...c.photos.map((ph) => ph.url)]),
   ];
   const urls = paths.map((p) => `  <url><loc>${esc(new URL(withBase(p), site).href)}</loc></url>`).join('\n');
   return new Response(

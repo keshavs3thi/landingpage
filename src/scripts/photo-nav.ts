@@ -1,4 +1,4 @@
-// Sidebar year toggles (instant) and the mobile Index sheet.
+// Sidebar category toggles (instant): show or hide a category's project links.
 
 for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-toggle]')) {
   btn.addEventListener('click', () => {
@@ -8,15 +8,5 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-toggle]'))
     btn.setAttribute('aria-expanded', String(open));
     list.hidden = !open;
     btn.querySelector('[aria-hidden]')!.textContent = open ? '−' : '+';
-  });
-}
-
-const sheet = document.querySelector<HTMLDialogElement>('[data-index-sheet]');
-if (sheet) {
-  document.querySelector('[data-index-open]')?.addEventListener('click', () => sheet.showModal());
-  sheet.querySelector('[data-index-close]')?.addEventListener('click', () => sheet.close());
-  // Close if the layout grows past the mobile breakpoint while open.
-  matchMedia('(max-width: 760px)').addEventListener('change', (e) => {
-    if (!e.matches && sheet.open) sheet.close();
   });
 }

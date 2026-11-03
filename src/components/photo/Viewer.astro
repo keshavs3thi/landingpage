@@ -54,14 +54,13 @@ const many = entries.length > 1;
   </div>
   <aside class="v-panel">
     <a class="v-btn v-close" href={listUrl} data-close autofocus>Close</a>
-    <details class="v-details" open>
-      <summary>Info</summary>
+    <div class="v-details">
       <div class="v-info" data-info>{e && <Fragment set:html={infoHtml(e)} />}</div>
       <div class="v-copy">
         <button class="v-btn v-copy-btn" type="button" data-copy>Copy link</button>
         <span class="v-copied" aria-live="polite" data-copied></span>
       </div>
-    </details>
+    </div>
   </aside>
 </dialog>
 <script type="application/json" data-viewer-list set:html={JSON.stringify(entries).replace(/</g, '\\u003c')} />

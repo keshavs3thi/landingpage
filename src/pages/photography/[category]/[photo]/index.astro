@@ -1,0 +1,35 @@
+---
+// A photo's shareable URL: its category page with the viewer already open on it.
+import type { GetStaticPaths } from 'astro';
+import Gallery from '../../../../components/photo/Gallery.astro';
+import { loadPhotos } from '../../../../lib/photos/load';
+import { ogImage } from '../../../../lib/photos/images';
+import { categoryTitle, pageDescription, pageTitle, sectionsOf } from '../../../../lib/photos/entries';
+import type { Category } from '../../../../lib/photos/types';
+import { withBase } from '../../../../lib/url';
+
+export const getStaticPaths = (async () => {
+  const { categories } = await loadPhotos();
+  // category.photos is in page order (loose, then projects), matching the viewer's list.
+  return categories.flatMap((c) =>
+    c.photos.map((ph, index) => ({ params: { category: c.slug, photo: ph.slug }, props: { category: c, index } })),
+  );
+}) satisfies GetStaticPaths;
+
+const { category, index } = Astro.props as { category: Category; index: number };
+const { categories } = await loadPhotos();
+const photo = category.photos[index];
+---
+
+<Gallery
+  categories={categories}
+  sections={sectionsOf(category)}
+  active={{ kind: 'category', category: category.slug }}
+  heading={`${category.title}: photographs`}
+  title={pageTitle(photo)}
+  description={pageDescription(photo)}
+  og={await ogImage(photo)}
+  open={index}
+  listUrl={withBase(category.url)}
+  listTitle={categoryTitle(category)}
+/>
