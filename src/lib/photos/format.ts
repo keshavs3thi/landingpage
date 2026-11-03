@@ -83,7 +83,13 @@ const FILM_NAMES: Record<string, string> = {
 
 // Words with digits read as model names (hp5 -> HP5, k1000 -> K1000, 800t -> 800T).
 const word = (w: string) => (/\d/.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1));
-const nameCase = (part: string) => part.split('-').filter(Boolean).map(word).join(' ');
+// Film and camera names also capitalise short model words (canon-ae-1 -> Canon AE 1).
+const nameCase = (part: string) =>
+  part
+    .split('-')
+    .filter(Boolean)
+    .map((w) => (w.length <= 2 ? w.toUpperCase() : word(w)))
+    .join(' ');
 
 function titleCase(part: string): string {
   return part
