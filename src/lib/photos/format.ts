@@ -33,7 +33,7 @@ export function date(raw?: string | Date): string | undefined {
 }
 
 // "Title or Project, location, year" (spec §11).
-export const altFallback = (name: string, location: string | undefined, year: string) =>
+export const altFallback = (name: string, location?: string, year?: string) =>
   [name, location, year].filter(Boolean).join(', ');
 
 export const slugify = (s: string) =>
@@ -95,7 +95,11 @@ function titleCase(part: string): string {
   return part
     .split(/[-_ ]+/)
     .filter(Boolean)
-    .map((w, i) => (i > 0 && SMALL_WORDS.has(w.toLowerCase()) ? w.toLowerCase() : word(w)))
+    .map((w, i) => {
+      if (i > 0 && SMALL_WORDS.has(w.toLowerCase())) return w.toLowerCase();
+      // Short words with digits are model names (m4 -> M4); longer ones are words (dekatemousa2).
+      return w.length <= 4 ? word(w) : w.charAt(0).toUpperCase() + w.slice(1);
+    })
     .join(' ');
 }
 
