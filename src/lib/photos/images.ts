@@ -11,7 +11,7 @@ export const GRID_WIDTHS = [600, 1000, 1400];
 export const VIEWER_WIDTHS = [1600, 2400];
 export const OG_WIDTH = 1600;
 
-export { GRID_SIZES, VIEWER_SIZES } from './render';
+export { GRID_SIZES, GRID_SIZES_WIDE, VIEWER_SIZES } from './render';
 
 export interface ImageSet {
   avif: string;

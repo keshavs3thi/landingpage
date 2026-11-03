@@ -2,7 +2,8 @@
 // the viewer script renders the same markup on the client, so there is one source of truth.
 
 // `sizes` for the grid and viewer; the viewer script needs them too, so they live here.
-export const GRID_SIZES = '(max-width: 760px) calc(50vw - 20px), (max-width: 1640px) 30vw, 400px';
+export const GRID_SIZES = '(max-width: 760px) calc(50vw - 20px), (max-width: 1640px) 25vw, 300px';
+export const GRID_SIZES_WIDE = '(max-width: 760px) calc(100vw - 32px), (max-width: 1640px) 50vw, 600px'; // two-column photos
 export const VIEWER_SIZES = '(max-width: 760px) 100vw, calc(100vw - 380px)';
 
 export interface ImageSetLike {

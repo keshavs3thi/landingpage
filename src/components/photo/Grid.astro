@@ -3,7 +3,7 @@
 // shareable URL, which the viewer intercepts when JS is available.
 import { withBase } from '../../lib/url';
 import { masonry } from '../../lib/photos/masonry';
-import { GRID_SIZES, gridSet } from '../../lib/photos/images';
+import { GRID_SIZES, GRID_SIZES_WIDE, gridSet } from '../../lib/photos/images';
 import { pictureHtml } from '../../lib/photos/render';
 import type { Photo } from '../../lib/photos/types';
 
@@ -26,7 +26,7 @@ const sets = await Promise.all(photos.map(gridSet));
           <a href={withBase(p.url)} data-i={offset + i}>
             <Fragment
               set:html={pictureHtml(sets[i], {
-                sizes: GRID_SIZES,
+                sizes: layout.wide[i] ? GRID_SIZES_WIDE : GRID_SIZES,
                 alt: p.alt,
                 w: p.width,
                 h: p.height,

@@ -44,7 +44,7 @@ Active state: full-brightness text versus muted text for inactive items. No acce
 - Because dimensions are known at build time, reserve exact space for every image so nothing shifts as images load.
 - Keep reading order roughly left-to-right across columns so the curated order still reads sensibly (do not use plain CSS `columns`, which orders top-to-bottom per column). Assign photos to the currently shortest column, computed from known aspect ratios, at each breakpoint.
 - Gap about 12-16px on desktop, 8-10px on mobile.
-- Columns: **3 on every page** wherever the grid is at least about 560px wide (all desktop and tablet layouts, including project sections and Featured); 2 on phones.
+- Columns: **4 on desktop** (grid at least about 880px wide), 3 on mid-width grids (from about 560px, including narrower project sections), 2 on phones. **Horizontals (aspect 1.2:1 or wider) span two columns** so they aren't dwarfed by verticals; verticals and squares take one. Each photo goes where it sits highest with the least empty space below it, and may swap with one of the next two to close a gap, so small uneven gaps can still appear occasionally.
 - Cap the content width so a small set doesn't look stretched.
 - **Hover:** subtle and fast (about 120ms), for example a slight brightness lift on the hovered photo or a 1px outline. No scale, no zoom, no overlays, no captions on hover. Cursor: pointer.
 

@@ -118,7 +118,7 @@ body.ph {
 }
 
 /* Masonry. Column counts follow the grid's own width (container queries), not the viewport.
-   Per-tile --c/--k/--m and per-grid --h/--g come from masonry.ts. */
+   Per-tile --c/--s/--k/--m and per-grid --h/--g come from masonry.ts. Horizontals span two columns. */
 /* Right-aligned: on screens wider than the cap, the spare space sits between sidebar and grid. */
 .grid-wrap {
   container-type: inline-size;
@@ -126,7 +126,7 @@ body.ph {
   margin-left: auto;
 }
 
-/* Three columns wherever there's room (every desktop page), two on phones. */
+/* Two columns on phones, three on mid-width grids, four on desktop. */
 .grid {
   --n: 2;
   --cw: calc((100cqi - (var(--n) - 1) * var(--gap)) / var(--n));
@@ -141,12 +141,13 @@ body.ph {
 
 .tile {
   --c: var(--c2);
+  --s: var(--s2);
   --k: var(--k2);
   --m: var(--m2);
   position: absolute;
   left: calc(var(--c) * (var(--cw) + var(--gap)));
   top: calc(var(--k) * var(--cw) + var(--m) * var(--gap));
-  width: var(--cw);
+  width: calc(var(--s) * var(--cw) + (var(--s) - 1) * var(--gap));
   aspect-ratio: var(--ar);
   background: var(--ph);
 }
@@ -159,8 +160,23 @@ body.ph {
   }
   .tile {
     --c: var(--c3);
+    --s: var(--s3);
     --k: var(--k3);
     --m: var(--m3);
+  }
+}
+
+@container (min-width: 880px) {
+  .grid {
+    --n: 4;
+    --H: var(--h4);
+    --G: var(--g4);
+  }
+  .tile {
+    --c: var(--c4);
+    --s: var(--s4);
+    --k: var(--k4);
+    --m: var(--m4);
   }
 }
 
