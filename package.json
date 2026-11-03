@@ -11,7 +11,8 @@
     "placeholders": "node scripts/make-placeholders.mjs",
     "resize-photos": "node scripts/resize-photos.mjs",
     "optimize-model": "node scripts/optimize-model.mjs",
-    "deploy": "node scripts/deploy.mjs"
+    "deploy": "node scripts/deploy.mjs",
+    "photo-names": "node scripts/photo-names.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
