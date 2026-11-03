@@ -1,4 +1,4 @@
-// Builds the gallery from the photos/ folder: categories (people, places, things) -> loose photos and
+// Builds the gallery from the photos/ folder: categories (people, places, cars) -> loose photos and
 // optional project folders, plus selected.yml. Each photo's title, film stock, year and film camera
 // come from its filename (format.ts parseFilename). Precedence: per-photo yml override > filename >
 // category.yml/project.yml defaults > EXIF. Film photos ignore EXIF entirely (it's the scanner's).
@@ -17,7 +17,7 @@ import type { Category, Photo, PhotoData, PhotoInfo, Project } from './types';
 export const CATEGORIES = [
   { slug: 'people', title: 'People' },
   { slug: 'places', title: 'Places' },
-  { slug: 'things', title: 'Things' },
+  { slug: 'cars', title: 'Cars' },
 ] as const;
 
 const ROOT = join(process.cwd(), 'photos');
@@ -27,7 +27,9 @@ const MAX_EDGE = 3200;
 // Vite turns every source JPEG into ImageMetadata, which getImage() needs. Don't read any property of
 // these objects: Astro's proxy then counts the original as used and ships it, EXIF and all.
 // Dimensions come from sharp instead.
-const IMAGES = import.meta.glob<ImageMetadata>('/photos/**/*.{jpg,jpeg,JPG,JPEG}', {
+// Only the category folders: an imported image that's never used skips the resize step, so Astro
+// ships it as the untouched original, EXIF and all. Must be a literal; keep in sync with CATEGORIES.
+const IMAGES = import.meta.glob<ImageMetadata>('/photos/{people,places,cars}/**/*.{jpg,jpeg,JPG,JPEG}', {
   eager: true,
   import: 'default',
 });
@@ -248,7 +250,7 @@ async function load(): Promise<PhotoData> {
   // Case-insensitive, like Windows and macOS: "02-anele1.jpg" in selected.yml matches 02-anele1.JPG.
   const byKey = new Map(categories.flatMap((c) => c.photos).map((p) => [p.key.toLowerCase(), p]));
   const entries = readYaml<unknown>(join(ROOT, 'selected.yml'));
-  if (entries === undefined) warn('photos/selected.yml is missing or empty; Selected will be empty');
+  if (entries === undefined) warn('photos/selected.yml is missing or empty; Featured will be empty');
   const selected: Photo[] = [];
   for (const raw of Array.isArray(entries) ? entries : []) {
     const key = String(raw).trim().replace(/^\/+|^photos\//g, '');

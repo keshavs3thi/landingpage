@@ -1,5 +1,5 @@
 ---
-// Phones: one slim sticky bar. Back on the left; Selected and the categories as small links on the
+// Phones: one slim sticky bar. Back on the left; Featured and the categories as small links on the
 // right (scrolls sideways if it ever overflows). Projects show as sections on the category page.
 import { withBase } from '../../lib/url';
 import type { Category } from '../../lib/photos/types';
@@ -12,7 +12,7 @@ interface Props {
 
 const { categories, active } = Astro.props;
 const links = [
-  { label: 'Selected', url: '/photography/', current: active.kind === 'selected' },
+  { label: 'Featured', url: '/photography/', current: active.kind === 'selected' },
   ...categories.map((c) => ({
     label: c.title,
     url: c.url,

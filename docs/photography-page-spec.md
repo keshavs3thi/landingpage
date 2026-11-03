@@ -18,12 +18,12 @@ https://sambitbiswas.com/photo : **layout inspiration only.** Take: a fixed left
 
 | Route | Shows |
 |-------|-------|
-| `/photography/` | **Selected:** a curated set (the default landing view). About 4 photos at launch. |
-| `/photography/<category>/` | One of **People, Places, Things**: its loose photos, then a section per project (anchor `#<project>`). |
+| `/photography/` | **Featured:** a curated set (the default landing view). About 4 photos at launch. |
+| `/photography/<category>/` | One of **People, Places, Cars**: its loose photos, then a section per project (anchor `#<project>`). |
 | `/photography/<category>/<photo>/` | Same page as its category, with the viewer **open on that photo**. This is the shareable link. |
 
 - The three categories are fixed, in that order. Projects are optional subdivisions of a category (e.g. a commission) and have no page of their own.
-- Expect roughly 4 photos in Selected at launch and up to about 20 per project, but design for 1-40 per project without breaking.
+- Expect roughly 4 photos in Featured at launch and up to about 20 per project, but design for 1-40 per project without breaking.
 - Photo slugs come from the filename title (section 8): `01-harbor__portra-400.jpg` → `harbor`. The build must fail with a clear message on duplicate slugs within a category.
 
 ## 4. Sidebar
@@ -31,8 +31,8 @@ https://sambitbiswas.com/photo : **layout inspiration only.** Take: a fixed left
 Fixed on the left on desktop (about 220-260px wide). **Only** this, with no bio, no info text:
 
 1. **Back**: a link to the landing page (`/`).
-2. **Selected**: link to `/photography/`.
-3. **People, Places, Things**, always listed (an empty one shows "No photos yet"). A category with projects is expandable to reveal them, linking to the project's section on the category page. The current category is expanded and shown as active; others are collapsed. Expand/collapse is instant or at most 150ms.
+2. **Featured**: link to `/photography/`.
+3. **People, Places, Cars**, always listed (an empty one shows "No photos yet"). A category with projects is expandable to reveal them, linking to the project's section on the category page. The current category is expanded and shown as active; others are collapsed. Expand/collapse is instant or at most 150ms.
 
 Active state: full-brightness text versus muted text for inactive items. No accent color needed. Projects come from the folder structure: adding a project folder adds a nav item automatically. A project with zero photos is hidden from the nav.
 
@@ -44,7 +44,7 @@ Active state: full-brightness text versus muted text for inactive items. No acce
 - Because dimensions are known at build time, reserve exact space for every image so nothing shifts as images load.
 - Keep reading order roughly left-to-right across columns so the curated order still reads sensibly (do not use plain CSS `columns`, which orders top-to-bottom per column). Assign photos to the currently shortest column, computed from known aspect ratios, at each breakpoint.
 - Gap about 12-16px on desktop, 8-10px on mobile.
-- Columns: **3 on every page** wherever the grid is at least about 560px wide (all desktop and tablet layouts, including project sections and Selected); 2 on phones.
+- Columns: **3 on every page** wherever the grid is at least about 560px wide (all desktop and tablet layouts, including project sections and Featured); 2 on phones.
 - Cap the content width so a small set doesn't look stretched.
 - **Hover:** subtle and fast (about 120ms), for example a slight brightness lift on the hovered photo or a 1px outline. No scale, no zoom, no overlays, no captions on hover. Cursor: pointer.
 
@@ -64,7 +64,7 @@ Clicking a photo expands it **from its position in the grid**:
   - Aperture, shutter speed, ISO, and date, when known
   - Project details (a short description from the project)
   - A "copy link" control
-- **Navigation:** left/right arrow keys, on-screen prev/next arrows, and **swipe** left/right on touch (the photo follows the finger). Show a small counter ("3 / 12"). Navigation stays within the current page (Selected, or a whole category including its projects) and wraps around from last to first and first to last. Moving between photos is a quick crossfade (about 120ms) on keyboard and arrows.
+- **Navigation:** left/right arrow keys, on-screen prev/next arrows, and **swipe** left/right on touch (the photo follows the finger). Show a small counter ("3 / 12"). Navigation stays within the current page (Featured, or a whole category including its projects) and wraps around from last to first and first to last. Moving between photos is a quick crossfade (about 120ms) on keyboard and arrows.
 - **Close:** `Esc`, the close button, or clicking the dimmed backdrop. Closing returns to the grid with scroll position preserved and focus returned to the originating tile. On touch, swipe down also closes.
 - **Shareable URL:** opening a photo updates the URL to its photo URL with `pushState`. Moving between photos uses `replaceState`, so the browser Back button closes the viewer in one step. Visiting a photo URL directly renders the category page with the viewer already open (no expand animation).
 - **Mobile layout:** the photo fills the width, with the info **always visible** below it as you scroll (no toggle). The heading is larger (about 18px, full-strength text) to draw the eye without competing with the photo. Same swipe navigation.
@@ -87,7 +87,7 @@ All content is folders and files in the repo. No database, no CMS (a git-based C
 ```
 photos/
   selected.yml
-  people/                              # people, places, things: the only folders read
+  people/                              # people, places, cars: the only folders read
     category.yml                       # optional defaults/overrides for the loose photos
     01-redlight.jpg                    # loose photo
     wedding-for-x/                     # optional project
@@ -95,7 +95,7 @@ photos/
       01-first-look__portra-400__2025.jpg
       02-vows__hp5__2025__pentax-k1000.jpg
   places/
-  things/
+  cars/
 ```
 
 **Filenames carry the photo's info:** `[NN-]title-words[__part][__part]...jpg`
@@ -141,7 +141,7 @@ photos:                   # optional per-photo overrides, keyed by filename; the
 Rules:
 - Precedence for every field: per-photo yml override > filename > folder yml defaults > EXIF.
 - Loose photos come first on a category page, then projects in `order`.
-- Warn at build (do not crash) when a photo in `selected.yml` doesn't exist, when a project has no `project.yml`, when a filename part isn't understood, or when a folder other than people/places/things exists under `photos/`.
+- Warn at build (do not crash) when a photo in `selected.yml` doesn't exist, when a project has no `project.yml`, when a filename part isn't understood, or when a folder other than people/places/cars exists under `photos/`.
 - Source files: **JPEG, sRGB, about 2400-3000px on the long edge, quality 85-90.** Never full-resolution originals. The build should warn on files above about 8MB or about 3200px. In Lightroom, export metadata as "All Except Person & Location Info" (keeps camera/lens, drops GPS).
 - Source JPEGs are **gitignored and never committed**; they live only in the local `photos/` folder. The `.yml` files are committed.
 
@@ -163,7 +163,7 @@ Generate everything at **build time** from the committed source files. Do not co
 
 ## 10. Mobile
 
-- The sidebar collapses into a slim sticky top bar: **Back** on the left, and **Selected · People · Places · Things** as small links on the right (current one brighter; scrolls sideways if it ever overflows). Projects appear as sections on the category page.
+- The sidebar collapses into a slim sticky top bar: **Back** on the left, and **Featured · People · Places · Cars** as small links on the right (current one brighter; scrolls sideways if it ever overflows). Projects appear as sections on the category page.
 - Grid as in section 5. Viewer as in section 6.
 - Touch targets at least 44px.
 
@@ -183,7 +183,7 @@ Generate everything at **build time** from the committed source files. Do not co
 
 Build with generated **placeholder photos** before real ones exist: a script that creates a neutral grey image set in assorted aspect ratios (portrait, landscape, square, panorama) with labels, in a few sample years and projects, plus a sample `selected.yml`. Real photos then drop into the same folders.
 
-1. **Phase 1:** data loading from folders, image pipeline, sidebar, masonry grid, Selected / year / project routes, mobile top bar and sheet.
+1. **Phase 1:** data loading from folders, image pipeline, sidebar, masonry grid, Featured / year / project routes, mobile top bar and sheet.
 2. **Phase 2:** the viewer: expand animation, info panel, arrows, swipe, shareable URLs, preloading.
 3. **Phase 3:** polish: performance and quality tuning against real photos, accessibility pass, README, social previews.
 
@@ -195,8 +195,8 @@ Build with generated **placeholder photos** before real ones exist: a script tha
 
 ## 15. Acceptance checklist
 
-- [ ] `/photography/` shows the curated Selected set in the order of `selected.yml`.
-- [ ] The sidebar contains only Back, Selected, and years/projects, generated from folders.
+- [ ] `/photography/` shows the curated Featured set in the order of `selected.yml`.
+- [ ] The sidebar contains only Back, Featured, and years/projects, generated from folders.
 - [ ] Masonry preserves aspect ratios, causes no layout shift, and looks balanced with exactly 4 photos.
 - [ ] Clicking a photo expands it in place with the info panel beside it (stacked on mobile).
 - [ ] Arrow keys, on-screen arrows, and swipe all navigate; `Esc`, close, and backdrop click all close.

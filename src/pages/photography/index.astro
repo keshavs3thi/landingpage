@@ -1,5 +1,5 @@
 ---
-// Selected: the curated set from photos/selected.yml, in that order.
+// Featured: the curated set from photos/selected.yml, in that order.
 import Gallery from '../../components/photo/Gallery.astro';
 import { loadPhotos } from '../../lib/photos/load';
 import { withBase } from '../../lib/url';
@@ -12,8 +12,8 @@ const { categories, selected } = await loadPhotos();
   categories={categories}
   sections={[{ photos: selected }]}
   active={{ kind: 'selected' }}
-  heading="Selected photographs"
+  heading="Featured photographs"
   title={`Photography — ${SITE.name}`}
-  description={`Selected photographs by ${SITE.name}.`}
+  description={`Featured photographs by ${SITE.name}.`}
   listUrl={withBase('/photography/')}
 />

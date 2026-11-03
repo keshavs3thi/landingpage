@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { fileOrder, parseFilename } from '../src/lib/photos/format.ts';
 
 const ROOT = 'photos';
-const CATEGORIES = ['people', 'places', 'things'];
+const CATEGORIES = ['people', 'places', 'cars']; // keep in sync with CATEGORIES in src/lib/photos/load.ts
 const isJpeg = (f) => /\.jpe?g$/i.test(f);
 const ls = (p) => (existsSync(p) ? readdirSync(p) : []);
 

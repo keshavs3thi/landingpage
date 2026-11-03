@@ -1,5 +1,5 @@
 ---
-// Back, Selected, then People / Places / Things with their projects (links to sections on the
+// Back, Featured, then People / Places / Cars with their projects (links to sections on the
 // category page). Generated from photos/. The current category is expanded; others collapse
 // behind a toggle (photo-nav.ts).
 import { withBase } from '../../lib/url';
@@ -22,7 +22,7 @@ const activeCategory = active.kind === 'category' ? active.category : undefined;
   <a class="side-back" href={withBase('/')}>Back</a>
   <ul class="side-list">
     <li>
-      <a href={withBase('/photography/')} aria-current={current(active.kind === 'selected')}>Selected</a>
+      <a href={withBase('/photography/')} aria-current={current(active.kind === 'selected')}>Featured</a>
     </li>
     {
       categories.map((c) => {
