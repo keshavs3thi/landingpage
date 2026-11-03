@@ -36,16 +36,81 @@ export function date(raw?: string | Date): string | undefined {
 export const altFallback = (name: string, location: string | undefined, year: string) =>
   [name, location, year].filter(Boolean).join(', ');
 
-// The whole base name, so any camera or Lightroom filename works: "01-Harbor Walk.jpg" -> "01-harbor-walk".
-export function slugFromFile(file: string): string {
-  return file
-    .replace(/\.[^.]+$/, '')
+export const slugify = (s: string) =>
+  s
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+
+// Filename grammar (spec §8): [NN-]title-words[__part]...
+//   "01-morning-tide__portra-400__2023__pentax-k1000.jpg"
+//   NN-      optional sort order, not part of the title or URL
+//   parts    a 4-digit number is the year; the first other part is the film stock (which makes the
+//            photo film), the next is the film camera
+export interface ParsedName {
+  title?: string; // unset for camera default names like KESH1234
+  slug: string;
+  film?: string;
+  year?: string;
+  camera?: string;
+  extra: string[]; // parts that matched nothing; the loader warns
 }
+
+// Camera, phone and scanner default names: these aren't titles.
+const DEFAULT_NAME = /^(?:kesh|imag?|img|dsc[f]?|pxl|scan|r\d+|[a-z]\d{2}kesh)[\w-]*$|^\d+$/i;
+
+const SMALL_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'with']);
+
+// Stock names whose casing can't be guessed from the slug. Anything else: "portra-400" -> "Portra 400".
+const FILM_NAMES: Record<string, string> = {
+  'tri-x': 'Tri-X',
+  'tri-x-400': 'Tri-X 400',
+  'tri-x-320': 'Tri-X 320',
+  'tmax-100': 'T-Max 100',
+  'tmax-400': 'T-Max 400',
+  't-max-100': 'T-Max 100',
+  't-max-400': 'T-Max 400',
+  'ultramax-400': 'UltraMax 400',
+  'colorplus-200': 'ColorPlus 200',
+  'cinestill-800t': 'CineStill 800T',
+  'cinestill-400d': 'CineStill 400D',
+  'cinestill-50d': 'CineStill 50D',
+  'hp5-plus': 'HP5 Plus',
+  'fp4-plus': 'FP4 Plus',
+};
+
+// Words with digits read as model names (hp5 -> HP5, k1000 -> K1000, 800t -> 800T).
+const word = (w: string) => (/\d/.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1));
+const nameCase = (part: string) => part.split('-').filter(Boolean).map(word).join(' ');
+
+function titleCase(part: string): string {
+  return part
+    .split(/[-_ ]+/)
+    .filter(Boolean)
+    .map((w, i) => (i > 0 && SMALL_WORDS.has(w.toLowerCase()) ? w.toLowerCase() : word(w)))
+    .join(' ');
+}
+
+export function parseFilename(file: string): ParsedName {
+  const [head, ...parts] = file.replace(/\.[^.]+$/, '').split('__');
+  const titlePart = head.replace(/^\d+[-_ .]+(?=.)/, '');
+  const out: ParsedName = { slug: slugify(titlePart) || slugify(head), extra: [] };
+  if (!DEFAULT_NAME.test(titlePart)) out.title = titleCase(titlePart);
+
+  for (const raw of parts) {
+    const part = slugify(raw);
+    if (!part) continue;
+    if (/^\d{4}$/.test(part) && !out.year) out.year = part;
+    else if (!out.film) out.film = FILM_NAMES[part] ?? nameCase(part);
+    else if (!out.camera) out.camera = nameCase(part);
+    else out.extra.push(raw);
+  }
+  return out;
+}
+
+export const slugFromFile = (file: string) => parseFilename(file).slug;
 
 // Numbered files first by number, then unnumbered in natural order (KESH-29 before KESH-133).
 const natural = (a: string, b: string) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
