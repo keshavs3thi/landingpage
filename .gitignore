@@ -3,6 +3,7 @@ dist/
 .astro/
 .DS_Store
 *.log
+renders-src/
 
 # Source GIFs for workshop hero videos: too large to commit; convert to MP4 and use heroVideo
 workshop/**/*.gif
@@ -18,3 +19,5 @@ photos/**/*.jpeg
 photos/**/*.JPG
 photos/**/*.JPEG
 photos/people/
+
+

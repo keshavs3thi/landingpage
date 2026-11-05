@@ -152,7 +152,7 @@
 
 .hit {
   position: absolute;
-  inset: 18% 16%;
+  inset: var(--hit, 18% 16%);
   border-radius: 40%;
   pointer-events: auto;
   cursor: pointer;

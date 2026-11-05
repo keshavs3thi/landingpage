@@ -9,6 +9,5 @@ MOBILE
 2. have category options visible as a small horizontal nav bar at the top of the page with the three categories
 3. for the info, instead of having it be a button, have the info be a title and have the info always visible upon scroll. emphasize the heading a bit more to attract eyes without overtaking the immage.
 
-change things to cars
-change selected to featured
+
 

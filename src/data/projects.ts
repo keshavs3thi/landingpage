@@ -1,5 +1,6 @@
 // Single source of truth for the hero. Flip `status` to "live" to make an item navigate.
-// Swap a placeholder for a final render by changing `image` (.svg -> .webp) and `width`/`height`.
+// Swap a placeholder for a final render: save it as renders-src/<id>.png, run
+// `npm run optimize-render -- <id>`, then paste the printed `image`, `width` and `height` here.
 
 export type Status = 'live' | 'soon';
 
@@ -8,11 +9,13 @@ export interface Project {
   title: string; // "TBD" until named; UI falls back to `fallbackTitle`
   fallbackTitle: string; // generic label from the spec table, shown only while title is TBD
   oneLiner: string; // "TBD" is hidden in the UI
+  year?: string; // shown in the label after the one-liner
   type: 'photography' | 'ux' | 'physical';
   image: string; // path under public/, base path added at render time
   width: number; // intrinsic size of the image file
   height: number;
   alt: string;
+  hit?: string; // CSS inset of the hover area inside the image; defaults to .hit in hero.css
   href: string;
   status: Status;
   accent: string; // hover background; must contrast with the object
@@ -45,17 +48,19 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'laptop',
-    title: 'TBD',
+    title: 'Learning Experience Platform',
     fallbackTitle: 'UX project',
     oneLiner: 'TBD',
+    year: '2024',
     type: 'ux',
-    image: '/renders/laptop.svg',
-    width: 1500,
-    height: 1100,
-    alt: 'Placeholder render of an open laptop showing a UX project', // TBD
+    image: '/renders/laptop.webp',
+    width: 920,
+    height: 832,
+    alt: 'Open silver laptop showing the Learning Experience Platform dashboard, with a Your Progress bubble chart and a metrics and badges panel',
+    hit: '10% 7%',
     href: '/work/laptop/',
     status: 'soon',
-    accent: '#3E5BA9', // TBD provisional
+    accent: '#4442E3', // Method logo blue (public/logos/method.svg)
     layout: {
       desktop: { x: 13, y: 42, scale: 0.85, rotate: 8, z: 2, floatPhase: 0.35 },
       mobile: { order: 4, scale: 0.85, rotate: 5 },
