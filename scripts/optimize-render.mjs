@@ -15,6 +15,8 @@ const LONG_EDGE = 1500;
 const SMALL_EDGE = 800;
 const MIN_SOURCE_EDGE = 1400;
 const PADDING = 0.06; // transparent margin on each side, as a fraction of the long edge
+// Objects that fill their frame need more, or they run into the hover label and off the mobile edge.
+const PADDING_BY_ID = { camera: 0.16, ball: 0.16 };
 const ALPHA_FLOOR = 8; // alpha at or below this counts as empty, so stray render noise can't widen the trim
 const WARN_BYTES = 300 * 1024;
 const WEBP = { quality: 86, alphaQuality: 100, effort: 6, smartSubsample: true };
@@ -66,13 +68,14 @@ if (left === 0 || top === 0 || right === w - 1 || bottom === h - 1) {
 
 // Trim to the object, then add the same margin to every render so they sit alike in their frames.
 // The margin scales with the object, because a small source is never enlarged to fill LONG_EDGE.
-const inner = Math.round(LONG_EDGE * (1 - PADDING * 2));
+const padding = PADDING_BY_ID[id] ?? PADDING;
+const inner = Math.round(LONG_EDGE * (1 - padding * 2));
 const { data: trimmed, info: object } = await sharp(input)
   .extract({ left, top, width: right - left + 1, height: bottom - top + 1 })
   .resize({ width: inner, height: inner, fit: 'inside', withoutEnlargement: true })
   .png()
   .toBuffer({ resolveWithObject: true });
-const pad = Math.round((Math.max(object.width, object.height) * PADDING) / (1 - PADDING * 2));
+const pad = Math.round((Math.max(object.width, object.height) * padding) / (1 - padding * 2));
 const master = await sharp(trimmed)
   .extend({ top: pad, bottom: pad, left: pad, right: pad, background: { r: 0, g: 0, b: 0, alpha: 0 } })
   .png()

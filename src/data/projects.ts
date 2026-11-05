@@ -35,16 +35,15 @@ export const PROJECTS: Project[] = [
     oneLiner: 'TBD',
     type: 'photography',
     image: '/renders/camera.webp',
-    width: 512,
-    height: 446,
+    width: 662,
+    height: 596,
     alt: 'Black and silver Fujifilm X-T3 mirrorless camera with an 18-55mm lens, seen from the front at a three-quarter angle',
-    hit: '10% 7%',
     href: '/photography/',
     status: 'live',
     accent: '#D9653B', // TBD provisional
     layout: {
-      desktop: { x: 88, y: 40, scale: 0.72, rotate: -14, z: 2, floatPhase: 0.0 },
-      mobile: { order: 5, scale: 0.75, rotate: -10 },
+      desktop: { x: 88, y: 40, scale: 0.88, rotate: -14, z: 2, floatPhase: 0.0 },
+      mobile: { order: 5, scale: 0.9, rotate: -10 },
     },
   },
   {
@@ -68,21 +67,22 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    id: 'model-a',
-    title: 'TBD',
-    fallbackTitle: 'Model A',
+    id: 'ball',
+    title: 'Emotiballs',
+    fallbackTitle: 'Emotiballs',
     oneLiner: 'TBD',
+    year: '2025',
     type: 'physical',
-    image: '/renders/model-a.svg',
-    width: 1400,
-    height: 1400,
-    alt: 'Placeholder render of physical model A, a sphere', // TBD
-    href: '/work/model-a/',
+    image: '/renders/ball.webp',
+    width: 736,
+    height: 732,
+    alt: 'Deep green textured ball with raised, flowing contours across its surface, lit from the upper left',
+    href: '/work/ball/',
     status: 'soon',
-    accent: '#8FA37E', // TBD provisional
+    accent: '#78AF43', // rim light on the render; the ball's body greens would hide its shadow side
     layout: {
-      desktop: { x: 44, y: 30, scale: 0.62, rotate: 14, z: 4, floatPhase: 0.6 },
-      mobile: { order: 1, scale: 0.7, rotate: 12 },
+      desktop: { x: 44, y: 30, scale: 0.65, rotate: 14, z: 4, floatPhase: 0.6 },
+      mobile: { order: 1, scale: 0.71, rotate: 12 },
     },
   },
   {
