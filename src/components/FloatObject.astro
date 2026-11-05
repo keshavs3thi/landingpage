@@ -40,7 +40,7 @@ if (contrast(bg, '#f6f3ee') < 4.5) throw new Error(`Accent ${p.accent} (${p.id})
 // Final renders ship at two sizes (scripts/optimize-render.mjs); SVG placeholders need neither attribute.
 // `sizes` mirrors the --obj-w widths in hero.css, including the 700px layout switch.
 const src = withBase(p.image);
-const srcset = p.image.endsWith('.webp')
+const srcset = p.image.endsWith('.webp') && Math.max(p.width, p.height) > 800
   ? `${src.replace(/\.webp$/, '-800.webp')} 800w, ${src} ${p.width}w`
   : undefined;
 const sizes = srcset

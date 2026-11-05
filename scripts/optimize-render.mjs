@@ -7,7 +7,7 @@
 // src/data/projects.ts. Afterwards, set that project's `image`, `width` and `height` to the printed values.
 
 import { existsSync } from 'node:fs';
-import { mkdir, stat } from 'node:fs/promises';
+import { mkdir, rm, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
@@ -83,13 +83,20 @@ await mkdir(dir, { recursive: true });
 const large = join(dir, `${id}.webp`);
 const small = join(dir, `${id}-${SMALL_EDGE}.webp`);
 const { width, height } = await sharp(master).webp(WEBP).toFile(large);
-await sharp(master)
-  .resize({ width: SMALL_EDGE, height: SMALL_EDGE, fit: 'inside', withoutEnlargement: true })
-  .webp(WEBP)
-  .toFile(small);
+// A master already within SMALL_EDGE needs no second size; FloatObject.astro skips srcset for it too.
+const hasSmall = Math.max(width, height) > SMALL_EDGE;
+if (hasSmall) {
+  await sharp(master)
+    .resize({ width: SMALL_EDGE, height: SMALL_EDGE, fit: 'inside' })
+    .webp(WEBP)
+    .toFile(small);
+} else {
+  await rm(small, { force: true });
+}
 
 const kb = (b) => `${Math.round(b / 1024)}KB`;
-const [largeSize, smallSize] = [(await stat(large)).size, (await stat(small)).size];
-console.log(`${input} (${meta.width}x${meta.height}) -> ${large} (${kb(largeSize)}), ${small} (${kb(smallSize)})`);
+const largeSize = (await stat(large)).size;
+const smallNote = hasSmall ? `, ${small} (${kb((await stat(small)).size)})` : '';
+console.log(`${input} (${meta.width}x${meta.height}) -> ${large} (${kb(largeSize)})${smallNote}`);
 if (largeSize > WARN_BYTES) console.warn(`Over ${kb(WARN_BYTES)}; heavy for the mobile performance target.`);
 console.log(`\nIn src/data/projects.ts:\n  image: '/renders/${id}.webp',\n  width: ${width},\n  height: ${height},`);

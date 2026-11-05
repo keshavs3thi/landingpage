@@ -34,10 +34,11 @@ export const PROJECTS: Project[] = [
     fallbackTitle: 'Photography',
     oneLiner: 'TBD',
     type: 'photography',
-    image: '/renders/camera.svg',
-    width: 1500,
-    height: 1200,
-    alt: 'Placeholder render of a camera', // TBD: describe the final render
+    image: '/renders/camera.webp',
+    width: 512,
+    height: 446,
+    alt: 'Black and silver Fujifilm X-T3 mirrorless camera with an 18-55mm lens, seen from the front at a three-quarter angle',
+    hit: '10% 7%',
     href: '/photography/',
     status: 'live',
     accent: '#D9653B', // TBD provisional
