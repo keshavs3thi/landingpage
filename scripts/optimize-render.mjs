@@ -16,7 +16,7 @@ const SMALL_EDGE = 800;
 const MIN_SOURCE_EDGE = 1400;
 const PADDING = 0.06; // transparent margin on each side, as a fraction of the long edge
 // Objects that fill their frame need more, or they run into the hover label and off the mobile edge.
-const PADDING_BY_ID = { camera: 0.16, ball: 0.16 };
+const PADDING_BY_ID = { camera: 0.16, ball: 0.16, speaker: 0.16, notquitebrick: 0.16 };
 const ALPHA_FLOOR = 8; // alpha at or below this counts as empty, so stray render noise can't widen the trim
 const WARN_BYTES = 300 * 1024;
 const WEBP = { quality: 86, alphaQuality: 100, effort: 6, smartSubsample: true };

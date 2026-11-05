@@ -34,7 +34,7 @@ const vars = [
   .join(';');
 
 // Hover background is a deep tint of the accent; light ink must stay legible on it.
-const bg = tint(p.accent);
+const bg = tint(p.accent, p.tintMix);
 if (contrast(bg, '#f6f3ee') < 4.5) throw new Error(`Accent ${p.accent} (${p.id}) tints too light for light ink`);
 
 // Final renders ship at two sizes (scripts/optimize-render.mjs); SVG placeholders need neither attribute.
@@ -58,7 +58,7 @@ const Tag = soon ? 'button' : 'a';
   data-status={p.status}
   data-accent={p.accent}
   data-bg={bg}
-  data-side={d.x > 60 ? 'left' : 'right'}
+  data-side={d.label ?? (d.x > 60 ? 'left' : 'right')}
   data-mside={index % 2 === 0 ? 'left' : 'right'}
   style={vars}
 >

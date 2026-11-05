@@ -21,3 +21,6 @@ photos/**/*.JPEG
 photos/people/
 
 
+
+# Personal tracker for ideas and future plans
+NEXT-STEPS.md

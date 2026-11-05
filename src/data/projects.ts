@@ -19,10 +19,11 @@ export interface Project {
   href: string;
   status: Status;
   accent: string; // hover background; must contrast with the object
+  tintMix?: number; // share of accent in the hover background, 0..1; defaults to tint()'s 0.35
   layout: {
     // x/y: % of hero stage (object centre). scale: relative to base object width. rotate: degrees.
-    // floatPhase: 0..1, fraction of the float cycle to offset by.
-    desktop: { x: number; y: number; scale: number; rotate: number; z: number; floatPhase: number };
+    // floatPhase: 0..1, fraction of the float cycle to offset by. label: hover label side; defaults by x.
+    desktop: { x: number; y: number; scale: number; rotate: number; z: number; floatPhase: number; label?: 'left' | 'right' };
     mobile: { order: number; scale: number; rotate: number };
   };
 }
@@ -40,7 +41,7 @@ export const PROJECTS: Project[] = [
     alt: 'Black and silver Fujifilm X-T3 mirrorless camera with an 18-55mm lens, seen from the front at a three-quarter angle',
     href: '/photography/',
     status: 'live',
-    accent: '#D9653B', // TBD provisional
+    accent: '#17B8B0', // teal: furthest hue from the other accents
     layout: {
       desktop: { x: 88, y: 40, scale: 0.88, rotate: -14, z: 2, floatPhase: 0.0 },
       mobile: { order: 5, scale: 0.9, rotate: -10 },
@@ -86,39 +87,42 @@ export const PROJECTS: Project[] = [
     },
   },
   {
-    id: 'model-b',
-    title: 'TBD',
-    fallbackTitle: 'Model B',
+    id: 'speaker',
+    title: 'Lotusbox',
+    fallbackTitle: 'Lotusbox',
     oneLiner: 'TBD',
+    year: '2024',
     type: 'physical',
-    image: '/renders/model-b.svg',
-    width: 1400,
-    height: 1400,
-    alt: 'Placeholder render of physical model B, a rounded cube', // TBD
-    href: '/work/model-b/',
+    image: '/renders/speaker.webp',
+    width: 969,
+    height: 928,
+    alt: 'Black tetrahedral speaker with a glossy face and thin wooden edges catching warm orange light',
+    href: '/work/speaker/',
     status: 'soon',
-    accent: '#D6A73C', // TBD provisional
+    accent: '#FF7A1A', // the bottom-right highlight's orange, pushed to full saturation
+    tintMix: 0.5, // orange turns brown at the default mix
     layout: {
-      desktop: { x: 58, y: 62, scale: 0.85, rotate: -12, z: 5, floatPhase: 0.15 },
-      mobile: { order: 2, scale: 0.8, rotate: -14 },
+      desktop: { x: 58, y: 62, scale: 1.0, rotate: -12, z: 5, floatPhase: 0.15 },
+      mobile: { order: 2, scale: 0.95, rotate: -14 },
     },
   },
   {
-    id: 'model-c',
-    title: 'TBD',
-    fallbackTitle: 'Model C',
+    id: 'notquitebrick',
+    title: 'notquitebrick',
+    fallbackTitle: 'notquitebrick',
     oneLiner: 'TBD',
+    year: '2026',
     type: 'physical',
-    image: '/renders/model-c.svg',
-    width: 1500,
-    height: 1000,
-    alt: 'Placeholder render of physical model C, a capsule', // TBD
-    href: '/work/model-c/',
+    image: '/renders/notquitebrick.webp',
+    width: 1354,
+    height: 1500,
+    alt: 'Translucent pink rounded-square puck with the word brick raised in script on a circular disc at its centre',
+    href: '/work/notquitebrick/',
     status: 'soon',
-    accent: '#7A4E6E', // TBD provisional
+    accent: '#BF72A5', // most saturated pink in the render's lit edges
     layout: {
-      desktop: { x: 41, y: 58, scale: 0.78, rotate: 32, z: 3, floatPhase: 0.8 },
-      mobile: { order: 3, scale: 0.9, rotate: 32 },
+      desktop: { x: 40, y: 62, scale: 0.78, rotate: -6, z: 3, floatPhase: 0.8, label: 'left' },
+      mobile: { order: 3, scale: 0.95, rotate: -6 },
     },
   },
 ];
