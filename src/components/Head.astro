@@ -1,6 +1,7 @@
 ---
 // Shared <head>: meta, canonical, Open Graph/Twitter, favicon, font. Used by every layout.
-import '@fontsource-variable/inter';
+import '@fontsource-variable/inter/opsz.css';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url';
 import { SITE } from '../data/site';
 import { withBase } from '../lib/url';
 
@@ -28,6 +29,7 @@ const ogUrl = new URL(ogImage, Astro.site);
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
+<link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 <meta name="description" content={description} />
 {noindex && <meta name="robots" content="noindex" />}
 <link rel="canonical" href={canonical} />

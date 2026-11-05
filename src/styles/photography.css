@@ -15,7 +15,7 @@ body.ph {
   --bg: var(--base-bg);
   --ink: var(--text);
   font-size: 14px;
-  letter-spacing: 0.005em;
+  letter-spacing: var(--tracking);
 }
 
 /* Low-specificity resets so component classes win. */
@@ -50,7 +50,6 @@ body.ph {
 
 .side-nav {
   font-size: 14px;
-  line-height: 1.35;
 }
 
 .side-nav a,
@@ -253,7 +252,7 @@ body.ph {
 .proj-desc {
   margin: 0;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: var(--leading-prose);
   color: var(--text-muted);
 }
 
@@ -442,7 +441,7 @@ html.viewer-open {
 
 .v-info {
   font-size: 13px;
-  line-height: 1.45;
+  line-height: var(--leading-prose);
 }
 
 .v-info a {
@@ -546,7 +545,5 @@ html.viewer-open {
   .v-title {
     margin-bottom: 4px;
     font-size: 18px;
-    letter-spacing: -0.005em;
-    line-height: 1.3;
   }
 }

@@ -52,10 +52,10 @@
 }
 
 .intro h1 {
-  margin: 0 0 0.3em;
+  margin: 0 0 var(--title-gap);
   font-size: clamp(44px, 7.2vw, 124px);
-  font-weight: 500;
-  letter-spacing: -0.04em;
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
   line-height: 0.92;
   white-space: nowrap;
 }
@@ -64,7 +64,8 @@
   margin: 0;
   max-width: min(28em, 62vw);
   font-size: clamp(15px, 1.2vw, 19px);
-  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: -0.015em;
 }
 
 /* One object. Positioned by its centre (data x/y %). */
@@ -238,8 +239,7 @@
 .label-title {
   display: block;
   font-size: 15px;
-  font-weight: 500;
-  letter-spacing: -0.005em;
+  font-weight: 600;
 }
 
 .label-line {
@@ -256,7 +256,7 @@
   border: 1px solid currentColor;
   border-radius: 999px;
   font-size: 11px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
 }
