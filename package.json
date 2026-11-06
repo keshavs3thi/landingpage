@@ -12,6 +12,7 @@
     "resize-photos": "node scripts/resize-photos.mjs",
     "optimize-model": "node scripts/optimize-model.mjs",
     "optimize-render": "node scripts/optimize-render.mjs",
+    "favicon": "node scripts/make-favicon.mjs",
     "deploy": "node scripts/deploy.mjs",
     "photo-names": "node scripts/photo-names.mjs"
   },
