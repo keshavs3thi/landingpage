@@ -127,7 +127,7 @@
 }
 
 .tilt {
-  transform: perspective(1100px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+  transform: perspective(1100px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)) scale(var(--lift, 1));
   transition:
     scale 500ms var(--ease),
     translate 500ms var(--ease);
